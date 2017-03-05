@@ -1,5 +1,36 @@
 flock.init();
 
+
+//////////
+// Array of Synths
+//////////
+var chansynths = [];
+
+for ( var i = 0 ; i < flock.enviro.shared.audioSystem.model.chans; i++){
+    chansynths.push({ugen: "flock.ugen.sinOsc", mul: 0.5});
+    chansynths[i].freq = 440 + (i*5); 
+}
+
+var synths = flock.synth({
+    synthDef: chansynths    
+});
+
+/*
+/// put this on its own channel
+var noiser = flock.synth({
+    synthDef: {
+        id: "noiser",
+        ugen: "flock.ugen.whiteNoise",    
+        mul: 0.05,
+        options: {
+            numOutputs: 1 
+        }
+              
+    }
+});
+*/
+
+/*
 var synth = flock.synth({
     synthDef:{
         id: "moogy",
@@ -19,22 +50,7 @@ var synth = flock.synth({
         cutoff: 1000,
     }
 });
-
-
-
-
-var noiser = flock.synth({
-    synthDef: {
-        id: "noiser",
-        ugen: "flock.ugen.whiteNoise",    
-        mul: 0.05,
-        options: {
-            numOutputs: 1 
-        }
-              
-    }
-});
-
+*/
 
 //////////
 //BUFFERS
