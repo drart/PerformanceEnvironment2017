@@ -3,7 +3,8 @@
   "author":"Adam Tindale",
   "version": "0.0.1",
   "dependencies": {
-    "flocking": "colinbdclark/flocking"
+    "flocking": "colinbdclark/flocking", 
+    "osc": "2.2.0"
   },
   "repository":{
     "type:":"git",
