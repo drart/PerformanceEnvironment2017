@@ -1,15 +1,16 @@
 {
-  "name":"performanceenvironment2017",
-  "author":"Adam Tindale",
+  "name": "performanceenvironment2017",
+  "author": "Adam Tindale",
   "version": "0.0.1",
   "dependencies": {
     "flocking": "colinbdclark/flocking", 
     "nexusui": "1.2.0",
     "myo": "3.0.0", 
+    "nan": "^2.6.2",
     "osc": "2.2.0"
   },
-  "repository":{
-    "type:":"git",
-    "url":"git@github.com:drart/performanceenvironment2017.git"
+  "repository": {
+    "type:": "git",
+    "url": "git@github.com:drart/performanceenvironment2017.git"
   }
 }
