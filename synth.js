@@ -1,4 +1,7 @@
-flock.init();
+flock.init({
+        chans:8
+}
+);
 
 
 //////////
@@ -7,13 +10,32 @@ flock.init();
 var chansynths = [];
 
 for ( var i = 0 ; i < flock.enviro.shared.audioSystem.model.chans; i++){
-    chansynths.push({ugen: "flock.ugen.sinOsc", mul: 0.5});
+    chansynths.push({ugen: "flock.ugen.sinOsc", mul: 0.05});
     chansynths[i].freq = 440 + (i*5); 
 }
 
 var synths = flock.synth({
     synthDef: chansynths    
 });
+
+var bop = flock.synth({
+    synthDef: {
+        id: "bop",
+        ugen: "flock.ugen.sinOsc",
+        freq: 440,
+        mul: {
+            ugen: "flock.ugen.asr",
+            start: 0.0,
+            attack: 0.1,
+            sustain: 0.1,
+            release: 0.5,
+        }
+    }
+});
+
+
+bop.play();
+
 
 /*
 /// put this on its own channel
@@ -57,4 +79,34 @@ var synth = flock.synth({
 //////////
 
 
+var thing1 = flock.synth({
+    synthDef: {
+        ugen: "flock.ugen.playBuffer",
+        buffer: {
+            id: "thing1",
+            url: "beat1.wav"
+        }, 
+        trigger :{
+            ugen: "flock.ugen.impulse",
+            freq: 1
+        }
+    }
+});
+
+/*
+var buffer;
+flock.audio.decode({
+    src: "beat1.wav",
+    success: function (bufDesc) {
+        buffer = bufDesc;
+        buffer.id = "thing1";
+        flock.environment.registerBuffer(buffer);
+        console.log(buffer);
+        waveform1.setBuffer(buffer._buffer);
+    },
+    error: function (err) {
+        console.log("There was an error while trying to load the convolver’s impulse reponse audio file.", err);
+    }
+});
+*/
 

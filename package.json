@@ -4,6 +4,8 @@
   "version": "0.0.1",
   "dependencies": {
     "flocking": "colinbdclark/flocking", 
+    "nexusui": "1.2.0",
+    "myo": "3.0.0", 
     "osc": "2.2.0"
   },
   "repository":{
