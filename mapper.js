@@ -104,20 +104,25 @@ var abletonNoteOns = function(msg){
 - start by clearing them all
 */
 
-var abletonpush = flock.midi.connection({
+var boppad = flock.midi.connection({
     openImmediately: true,
     ports: {
         name : "BopPad"
     },
-
     listeners: {
         noteOn: function (msg) {
             //console.log(msg);
             bop.set("bop.mul.gate", 1);
+            setTimeout(function(){
+                bop.set("bop.mul.gate", 0);
+                //console.log(msg);
+                }, 500
+            );
         },
         noteOff: function (msg) {
+
             //console.log(msg);
-            bop.set("mod.mul.gate", 0);
+
         },
         control: function (msg) {
             //console.log(msg);
