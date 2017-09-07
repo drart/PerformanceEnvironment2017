@@ -104,7 +104,7 @@ var abletonNoteOns = function(msg){
 - start by clearing them all
 */
 
-var abletonpush = flock.midi.connection({
+var boppad = flock.midi.connection({
     openImmediately: true,
     ports: {
         name : "BopPad"
@@ -117,7 +117,7 @@ var abletonpush = flock.midi.connection({
         },
         noteOff: function (msg) {
             //console.log(msg);
-            bop.set("mod.mul.gate", 0);
+            bop.set("bop.mul.gate", 0);
         },
         control: function (msg) {
             //console.log(msg);
@@ -133,3 +133,29 @@ var abletonpush = flock.midi.connection({
  
 });
 
+var quneo = flock.midi.connection({
+    openImmediately: true,
+    ports: {
+        name : "QUNEO MIDI 1"
+    },
+    listeners: {
+        noteOn: function (msg) {
+            //console.log(msg);
+            bop.set("bop.mul.gate", 1);
+        },
+        noteOff: function (msg) {
+            //console.log(msg);
+            bop.set("bop.mul.gate", 0);
+        },
+        control: function (msg) {
+            console.log(msg);
+            //bop.set("bop.mul.gate", 0);
+        },
+        pitchbend: function(msg) {
+            console.log(msg);
+        },
+        aftertouch: function(msg){
+            console.log(msg);
+        }
+    }
+});
