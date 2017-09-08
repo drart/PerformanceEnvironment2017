@@ -140,11 +140,12 @@ var boppad = flock.midi.connection({
 var quneo = flock.midi.connection({
     openImmediately: true,
     ports: {
-        name : "QUNEO MIDI 1"
+        name : "QUNEO"
     },
     listeners: {
         noteOn: function (msg) {
-            //console.log(msg);
+            console.log(msg);
+            bop.set("bop.freq", Math.pow(2, (msg.note-69)/12) * 440 );
             bop.set("bop.mul.gate", 1);
         },
         noteOff: function (msg) {
@@ -152,14 +153,14 @@ var quneo = flock.midi.connection({
             bop.set("bop.mul.gate", 0);
         },
         control: function (msg) {
-            console.log(msg);
+            //console.log(msg);
             //bop.set("bop.mul.gate", 0);
         },
         pitchbend: function(msg) {
-            console.log(msg);
+            //console.log(msg);
         },
         aftertouch: function(msg){
-            console.log(msg);
+            //console.log(msg);
         }
     }
 });

@@ -26,7 +26,7 @@ var bop = flock.synth({
         mul: {
             ugen: "flock.ugen.asr",
             start: 0.0,
-            attack: 0.1,
+            attack: 0.01,
             sustain: 0.1,
             release: 0.5,
         }
@@ -52,26 +52,37 @@ var noiser = flock.synth({
 });
 */
 
-/*
 var synth = flock.synth({
     synthDef:{
         id: "moogy",
         ugen: "flock.ugen.filter.moog",
         source: {
             id: "testy",
-            ugen: "flock.ugen.sin",
+            ugen: "flock.ugen.whiteNoise",
             mul: {
                 id: "freqy",
                 ugen: "flock.ugen.dust",
-                density: 10,
-                mul: 0.3,
+                density: 100,
+                mul: 0.4,
                 add: 0.5
             }
         },
-        resonance: 10,
-        cutoff: 1000,
+        resonance: {
+           ugen: "flock.ugen.line",
+           start: 1,
+           end: 15,
+           duration: 100    
+        },
+        cutoff: {
+            ugen: "flock.ugen.sinOsc",
+            freq: 0.1,
+            mul: 500,
+            add: 1000
+        },
     }
 });
+
+/*
 */
 
 //////////
@@ -79,6 +90,7 @@ var synth = flock.synth({
 //////////
 
 
+/*
 var thing1 = flock.synth({
     synthDef: {
         ugen: "flock.ugen.playBuffer",
@@ -93,7 +105,6 @@ var thing1 = flock.synth({
     }
 });
 
-/*
 var buffer;
 flock.audio.decode({
     src: "beat1.wav",
