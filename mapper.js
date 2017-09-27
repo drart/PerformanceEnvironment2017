@@ -159,3 +159,32 @@ var quneo = flock.midi.connection({
         }
     }
 });
+
+var akai = flock.midi.connection({
+    openImmediately: true,
+    ports: {
+        name : "LPD8 MIDI 1"
+    },
+    listeners: {
+        noteOn: function (msg) {
+            console.log(msg);
+	    bop.set("bop.freq", msg.note* 200);
+            bop.set("bop.mul.gate", 1);
+        },
+        noteOff: function (msg) {
+            //console.log(msg);
+            bop.set("bop.mul.gate", 0);
+        },
+        control: function (msg) {
+            console.log(msg.number);
+            //bop.set("bop.mul.gate", 0);
+	    synths.set(Number( msg.number -1 ).toString() + '.mul', msg.value/ 127);
+        },
+        pitchbend: function(msg) {
+            console.log(msg);
+        },
+        aftertouch: function(msg){
+            console.log(msg);
+        }
+    }
+});
