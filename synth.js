@@ -10,7 +10,7 @@ flock.init({
 var chansynths = [];
 
 for ( var i = 0 ; i < flock.enviro.shared.audioSystem.model.chans; i++){
-    chansynths.push({ugen: "flock.ugen.sinOsc", mul: 0.05});
+    chansynths.push({ugen: "flock.ugen.sinOsc", mul: 0.0});
     chansynths[i].freq = 440 + (i*5); 
     chansynths[i].id = Number(i).toString();
 }

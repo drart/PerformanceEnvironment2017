@@ -109,11 +109,15 @@ var boppad = flock.midi.connection({
     ports: {
         name : "BopPad"
     },
-
     listeners: {
         noteOn: function (msg) {
             //console.log(msg);
             bop.set("bop.mul.gate", 1);
+            setTimeout(function(){
+                bop.set("bop.mul.gate", 0);
+                //console.log(msg);
+                }, 500
+            );
         },
         noteOff: function (msg) {
             //console.log(msg);
