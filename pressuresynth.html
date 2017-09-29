@@ -1,0 +1,50 @@
+<html>
+    <head>
+        <script src="node_modules/flocking/dist/flocking-all.min.js"></script>
+        <script src="node_modules/pressure/dist/pressure.min.js"></script>
+    </head>
+    <body>
+        <script>
+            Pressure.set('body', {
+                change: function(force){
+                    this.innerHTML = force;
+                }
+            });
+
+            var clckd = false;
+
+            function printMousePos(event) {
+                if (clckd){
+                    //console.log( "clientX: " + event.clientX + " - clientY: " + event.clientY);
+                    granny.set("granny.grainDur", event.clientX /1000 + 0.01 )
+                    granny.set("granny.source.freq", event.clientY + 200)
+                    console.log(granny.get("granny.grainDur"));
+                }
+            }
+
+            document.addEventListener("mousedown", function(e){
+                clckd = true;
+            });
+            document.addEventListener("mouseup", function(e){
+                clckd = false;
+            });
+            document.addEventListener("mousemove", printMousePos);
+
+            var granny = flock.synth({
+                synthDef: {
+                    id: "granny",
+                    ugen: "flock.ugen.granulator",
+                    numGrains: 4 ,
+                    grainDur: 0.1,
+                    delayDur: 3,
+                    source: {
+                        ugen: "flock.ugen.whiteNoise"
+                    }
+                }
+            });
+
+            flock.init();
+            granny.play();
+        </script>
+    </body>
+</html>
