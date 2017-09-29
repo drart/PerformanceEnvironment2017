@@ -1,40 +1,41 @@
 <!DOCTYPE html>
 <head>
   <title>Live</title>
+  <script src="node_modules/nexusui/dist/nexusUI.min.js"></script>
+  <script src="node_modules/flocking/dist/flocking-all.js"></script>
 </head>
 
 <body>
   <div> https://gist.github.com/colinbdclark/0bd443589eec51d0756bff736e6c346d  -- How to use buses</div>
+  <input type="checkbox" id="onoff" name="vehicle">
   
   <div id="midiDisplay"></div>
   <div id="message"></div>
-  <canvas nx="waveform" style="width:900px;height:100px;display:block;margin:10px auto 0px"></canvas>
-  <canvas nx="waveform" style="width:900px;height:100px;display:block;margin:10px auto 0px"></canvas>
-  <canvas nx="waveform" style="width:900px;height:100px;display:block;margin:10px auto 0px"></canvas>
-
-  <input type="checkbox" id="onoff" name="vehicle">
-
-  <script src="node_modules/nexusui/dist/nexusUI.min.js"></script>
-  <script src="node_modules/flocking/dist/flocking-all.js"></script>
-  <script src="node_modules/nexusui/dist/nexusUI.min.js"></script>
-  <script src="synth.js"></script>
-  <script src="gamepads.js"></script>
-  <script src="mapper.js"></script>
 
   <canvas nx="multitouch"></canvas>
   <canvas nx="tilt"></canvas> 
-
-  <canvas nx="envelope"></canvas>
-  <canvas nx="envelope"></canvas>
-
-  <canvas nx="waveform"></canvas>
-  <canvas nx="waveform"></canvas>
-  <canvas nx="waveform"></canvas>
-  <canvas nx="waveform"></canvas>
-
+	
   <!-- attach this to myos?  -->
   <canvas nx="multislider"></canvas>
+
+  <canvas nx="waveform" style="width:900px;height:100px;display:block;margin:10px auto 0px"></canvas>
+  <canvas nx="waveform" style="width:900px;height:100px;display:block;margin:10px auto 0px"></canvas>
+  <canvas nx="waveform" style="width:900px;height:100px;display:block;margin:10px auto 0px"></canvas>
+
+  <canvas nx="envelope"></canvas>
+  <canvas nx="envelope"></canvas>
+
+  <!--
+  <canvas nx="waveform"></canvas>
+  <canvas nx="waveform"></canvas>
+  <canvas nx="waveform"></canvas>
+  <canvas nx="waveform"></canvas>
+  -->
+
   <!--script src="analyzer.js"></script-->
   <script src="nexussetup.js"></script>
+  <script src="synth.js"></script>
+  <script src="gamepads.js"></script>
+  <script src="mapper.js"></script>
 </body>
 </html>

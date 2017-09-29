@@ -12,6 +12,7 @@ var chansynths = [];
 for ( var i = 0 ; i < flock.enviro.shared.audioSystem.model.chans; i++){
     chansynths.push({ugen: "flock.ugen.sinOsc", mul: 0.0});
     chansynths[i].freq = 440 + (i*5); 
+    chansynths[i].id = Number(i).toString();
 }
 
 var synths = flock.synth({
@@ -33,8 +34,27 @@ var bop = flock.synth({
     }
 });
 
-
 bop.play();
+
+
+var tick = flock.synth({
+	synthDef: {
+		id : "tick",
+		ugen: "flock.ugen.filter.moog", 
+		resonance: 10,
+		cutoff: 500,
+		source: {
+			ugen: "flock.ugen.whiteNoise"
+		},
+		mul: {
+		    ugen: "flock.ugen.asr",
+		    start: 0.0,
+		    attack: 0.1,
+		    sustain: 0.1,
+		    release: 0.5,
+		}
+	}
+});
 
 
 /*
