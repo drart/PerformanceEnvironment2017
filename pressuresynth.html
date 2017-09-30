@@ -4,21 +4,26 @@
         <script src="node_modules/pressure/dist/pressure.min.js"></script>
     </head>
     <body>
+        <div id="pressure"></div>
+        <div id="mousex"></div>
+        <div id="mousey"></div>
         <script>
+            var clckd = false;
+
             Pressure.set('body', {
                 change: function(force){
-                    this.innerHTML = force;
+                    document.getElementById("pressure").innerHTML = force;
+                    granny.set("granny.mul.mul", force);
                 }
             });
 
-            var clckd = false;
-
             function printMousePos(event) {
                 if (clckd){
+                    document.getElementById("mousex").innerHTML = event.clientX;
+                    document.getElementById("mousey").innerHTML = event.clientY;
                     //console.log( "clientX: " + event.clientX + " - clientY: " + event.clientY);
-                    granny.set("granny.grainDur", event.clientX /1000 + 0.01 )
-                    granny.set("granny.source.freq", event.clientY + 200)
-                    console.log(granny.get("granny.grainDur"));
+                    //granny.set("granny.", event.clientX /1000 + 0.01 )
+                    granny.set("granny.freq.freq", event.clientY + 200)
                 }
             }
 
@@ -33,12 +38,17 @@
             var granny = flock.synth({
                 synthDef: {
                     id: "granny",
-                    ugen: "flock.ugen.granulator",
-                    numGrains: 4 ,
-                    grainDur: 0.1,
-                    delayDur: 3,
-                    source: {
-                        ugen: "flock.ugen.whiteNoise"
+                    ugen: "flock.ugen.sinOsc",
+                    freq: {
+                        ugen: "flock.ugen.sinOsc",
+                        freq: 200,
+                        mul: 300,
+                        add: 500
+                    },
+                    mul: {
+                        ugen: "flock.ugen.sinOsc",
+                        mul: 0,
+                        add: 0.5
                     }
                 }
             });
