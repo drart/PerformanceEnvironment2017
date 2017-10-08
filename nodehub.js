@@ -4,19 +4,20 @@ var WebSocket = require('ws');
 var wss = new WebSocket.Server({ port: 9000 });
 
 wss.on("connection", function (socket) {
-        var socketPort = new osc.WebSocketPort({
-                    socket: socket,
-                    metadata: true
-        });
+    var socketPort = new osc.WebSocketPort({
+        socket: socket,
+        metadata: true
+    });
 
-            socketPort.on("message", function (oscMsg) {
-                if (oscMsg.address === "/pressurexy"){
-                    console.log(typeof oscMsg.args[0].value);
-                    s.set("tester.freq.freq", oscMsg.args[0].value + 1 );
-                    s.set("tester.freq.mul", oscMsg.args[1].value + 1);
-                    s.set("tester.freq.add", oscMsg.args[2].value + 1);
-                }
-            });
+    // work on this
+    socketPort.on("message", function (oscMsg) {
+        if (oscMsg.address === "/pressurexy"){
+            console.log(typeof oscMsg.args[0].value);
+            s.set("tester.freq.freq", oscMsg.args[0].value + 1 );
+            s.set("tester.freq.mul", oscMsg.args[1].value + 1);
+            s.set("tester.freq.add", oscMsg.args[2].value + 1);
+        }
+    });
 });
 
 var flock = require("flocking");
@@ -25,7 +26,13 @@ flock.init({
     chans: 8
 });
 
+var synths = require("./testsynth");
+console.log(adam.bop);
 
+//var mappings = require("./mapper");
+
+
+/*
 var s = flock.synth({
     synthDef: {
         ugen: "flock.ugen.sin",
@@ -54,3 +61,4 @@ var s = flock.synth({
 
 s.play();
 
+*/
