@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <head>
-    <title>Test BOPPAD GLITCHING</title>
+    <title>Test BOPPAD</title>
 </head>
 
 <body>
-
+    <div id="boppad-midi-display"></div>
     <script src="../node_modules/flocking/dist/flocking-all.js"></script>
     <script>
 
@@ -24,7 +24,26 @@
         });
         bop.play();
 
-
+        var cloosh = flock.synth({
+            synthDef: {
+                ugen: "flock.ugen.freeverb",
+                source: {
+                    ugen: "flock.ugen.sinOsc",
+                    freq: 500,
+                    mul: {
+                        id : "env",
+                        ugen: "flock.ugen.envGen",
+                        rate: "control",
+                        envelope: {
+                            levels: [0, 1, 0],
+                            times: [0.1, 0.3],
+                            curve: ["exponential", "exponential"]
+                        }
+                    }
+                }
+            }  
+        });
+        cloosh.play();
 
         var boppad = flock.midi.connection({
             openImmediately: true,
@@ -33,35 +52,33 @@
             },
             listeners: {
                 noteOn: function (msg) {
-                    console.log(msg);
-                    bop.set("bop.mul.gate", 1);
-                    setTimeout(function(){
-                        bop.set("bop.mul.gate", 0);
-                        //console.log(msg);
-                    }, 500
-                    );
+                    $("#boppad-midi-display").text(fluid.prettyPrintJSON(msg));
+                    cloosh.set("env.gate", 1);
+                    //bop.set("bop.mul.gate", 1);
                 },
                 noteOff: function (msg) {
-
+                    $("#boppad-midi-display").text(fluid.prettyPrintJSON(msg));
+                    //bop.set("bop.mul.gate", 0);
+                    cloosh.set("env.gate", 0);
                     //console.log(msg);
-
                 },
                 control: function (msg) {
+                    $("#boppad-midi-display").text(fluid.prettyPrintJSON(msg));
                     //console.log(msg);
                     //bop.set("bop.mul.gate", 0);
                 },
                 pitchbend: function(msg) {
-                    console.log(msg);
+                    $("#boppad-midi-display").text(fluid.prettyPrintJSON(msg));
+                    //console.log(msg);
                 },
                 aftertouch: function(msg){
-                    console.log(msg);
+                    $("#boppad-midi-display").text(fluid.prettyPrintJSON(msg));
+                    //console.log(msg);
                 }
             }
 
         });
 
-
     </script>
-
 </body>
 </html>
