@@ -15,9 +15,6 @@
             
             Pressure.set('body', {
                 change: function(force){
-                    if (!flock.enviro.shared.model.isPlaying) {
-                        flock.enviro.shared.play();
-                    }
                     document.getElementById("pressure").innerHTML = force;
                     granny.set("granny.mul.mul", force);
                 }
@@ -25,6 +22,9 @@
 
             function printMousePos(event) {
                 event.preventDefault();
+                if (!flock.enviro.shared.model.isPlaying) {
+                    flock.enviro.shared.play();
+                }
                 document.getElementById("mousex").innerHTML = event.clientX;
                 document.getElementById("mousey").innerHTML = event.clientY;
                 granny.set("granny.freq.freq", event.clientY + 200);
@@ -36,6 +36,9 @@
 
             function printTouchPos(event) {
                 event.preventDefault();
+                if (!flock.enviro.shared.model.isPlaying) {
+                    flock.enviro.shared.play();
+                }
                 document.getElementById("mousex").innerHTML = event.touches[0].clientX;
                 document.getElementById("mousey").innerHTML = event.touches[0].clientY;
                 granny.set("granny.freq.freq", event.touches[0].clientY + 200)
