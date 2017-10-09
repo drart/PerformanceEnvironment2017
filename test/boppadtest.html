@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<head>
+    <title>Test BOPPAD GLITCHING</title>
+</head>
+
+<body>
+
+    <script src="../node_modules/flocking/dist/flocking-all.js"></script>
+    <script>
+
+        var bop = flock.synth({
+            synthDef: {
+                id: "bop",
+                ugen: "flock.ugen.sinOsc",
+                freq: 440,
+                mul: {
+                    ugen: "flock.ugen.asr",
+                    start: 0.0,
+                    attack: 0.1,
+                    sustain: 0.1,
+                    release: 0.5,
+                }
+            }
+        });
+        bop.play();
+
+
+
+        var boppad = flock.midi.connection({
+            openImmediately: true,
+            ports: {
+                name : "BopPad"
+            },
+            listeners: {
+                noteOn: function (msg) {
+                    console.log(msg);
+                    bop.set("bop.mul.gate", 1);
+                    setTimeout(function(){
+                        bop.set("bop.mul.gate", 0);
+                        //console.log(msg);
+                    }, 500
+                    );
+                },
+                noteOff: function (msg) {
+
+                    //console.log(msg);
+
+                },
+                control: function (msg) {
+                    //console.log(msg);
+                    //bop.set("bop.mul.gate", 0);
+                },
+                pitchbend: function(msg) {
+                    console.log(msg);
+                },
+                aftertouch: function(msg){
+                    console.log(msg);
+                }
+            }
+
+        });
+
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,15 @@
+<html>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <script src="Flocking/dist/flocking-all.js"></script>
+    <body>
+        <div id="flockchans"></div>
+
+        <script>
+            flock.init({
+                chans:8
+            });
+
+            document.getElementById("flockchans").innerHTML = flock.enviro.shared.audioSystem.model.chans;
+        </script>
+    </body>
+</html>
