@@ -14,8 +14,10 @@
 
         var cloosh = flock.synth({
             synthDef: {
+                id: "freeverb",
                 ugen: "flock.ugen.freeverb",
                 source: {
+                    id: "boop",
                     ugen: "flock.ugen.sinOsc",
                     freq: 500,
                     mul: {
@@ -41,7 +43,15 @@
             listeners: {
                 noteOn: function (msg) {
                     $("#boppad-midi-display").text(fluid.prettyPrintJSON(msg));
-                    cloosh.set("env.gate", 1);
+                    if (msg.note >= 68 && msg.note <= 83){
+                        var myval = (83 - msg.note)/ (83 - 68); 
+                        cloosh.set("env.gate", 1);
+                        cloosh.set("boop.freq", msg.note * 40);
+                        cloosh.set("freeverb.room", myval);
+                        cloosh.set("freeverb.damp", 1 - myval);
+                        //cloosh.set("freeverb.mix", Math.sin(myval));
+                        cloosh.set("freeverb.width", Math.sin(myval));
+                    }
                     //bop.set("bop.mul.gate", 1);
                 },
                 noteOff: function (msg) {
@@ -54,6 +64,9 @@
                     $("#boppad-midi-display").text(fluid.prettyPrintJSON(msg));
                     //console.log(msg);
                     //bop.set("bop.mul.gate", 0);
+                    if(msg.number === 10){
+                        cloosh.set("freeverb.mix", msg.value/127 );
+                    }
                 },
                 pitchbend: function(msg) {
                     $("#boppad-midi-display").text(fluid.prettyPrintJSON(msg));
