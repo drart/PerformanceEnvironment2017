@@ -26,8 +26,10 @@ flock.init({
     chans: 8
 });
 
-var synths = require("./testsynth");
-console.log(adam.bop);
+var adam = require("./adam");
+var bop = adam.bop();
+
+console.log(adam);
 
 //var mappings = require("./mapper");
 

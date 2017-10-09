@@ -17,6 +17,8 @@ var synths = flock.synth({
 // Simple Sine Synth
 //////
 (function(){
+    fluid.registerNamespace("adam");
+
     fluid.defaults("adam.bop", {
         gradeNames: ["flock.synth", "autoInit"],
         synthDef: {
@@ -32,9 +34,15 @@ var synths = flock.synth({
             }
         }
     });
+
     if (typeof module !== 'undefined' && module.exports) {
-        fluid.module.register("adam.bop"); 
+        fluid.module.register("adam", __dirname, require); 
+        module.exports = adam;
     }
+    else{
+        // do web stuff 
+    }
+
 })();
 
 var tick = flock.synth({
