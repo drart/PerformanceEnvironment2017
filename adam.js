@@ -1,9 +1,9 @@
-//////
-// Simple Sine Synth
-//////
 (function(){
     var adam = fluid.registerNamespace("adam");
  
+    //////
+    // Simple Sine Synth
+    //////
     fluid.defaults("adam.bop", {
         gradeNames: ["flock.synth", "autoInit"],
         synthDef: {
@@ -70,6 +70,25 @@
                 add: 1000
             },
         }
+    });
+
+    fluid.defaults("adam.amfm", {
+        gradeNames: ["flock.synth", "autoInit"],
+                synthDef: {
+                    id: "granny",
+                    ugen: "flock.ugen.sinOsc",
+                    freq: {
+                        ugen: "flock.ugen.sinOsc",
+                        freq: 200,
+                        mul: 300,
+                        add: 500
+                    },
+                    mul: {
+                        ugen: "flock.ugen.sinOsc",
+                        mul: 0,
+                        add: 0.5
+                    }
+                }
     });
 
     // detect node.js environement

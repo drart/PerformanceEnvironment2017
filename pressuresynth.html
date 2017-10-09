@@ -3,9 +3,7 @@
         <script src="node_modules/flocking/dist/flocking-all.min.js"></script>
         <script src="node_modules/pressure/dist/pressure.min.js"></script>
         <style>
-            html, body {
-                    overflow: hidden;
-            }
+            html, body { overflow: hidden; }
         </style>
     </head>
     <body>
@@ -13,10 +11,13 @@
         <div id="mousex"></div>
         <div id="mousey"></div>
         <script>
-            var clckd = false;
-
+            flock.init();
+            
             Pressure.set('body', {
                 change: function(force){
+                    if (!flock.enviro.shared.model.isPlaying) {
+                        flock.enviro.shared.play();
+                    }
                     document.getElementById("pressure").innerHTML = force;
                     granny.set("granny.mul.mul", force);
                 }
@@ -24,62 +25,31 @@
 
             function printMousePos(event) {
                 event.preventDefault();
-                if (clckd){
-                    document.getElementById("mousex").innerHTML = event.clientX;
-                    document.getElementById("mousey").innerHTML = event.clientY;
-                    granny.set("granny.freq.freq", event.clientY + 200)
-                }
+                document.getElementById("mousex").innerHTML = event.clientX;
+                document.getElementById("mousey").innerHTML = event.clientY;
+                granny.set("granny.freq.freq", event.clientY + 200);
+                granny.set("granny.freq.add", event.clientX + 200);
             }
-
-            document.addEventListener("mousedown", function(e){
-                if (!flock.enviro.shared.model.isPlaying) {
-                    flock.enviro.shared.play();
-                }
-                clckd = true;
-            });
-            document.addEventListener("mouseup", function(e){
-                clckd = false;
-            });
-            document.addEventListener("touchstart", function(e){
-                if (!flock.enviro.shared.model.isPlaying) {
-                    flock.enviro.shared.play();
-                }
-                clckd = true;
-            });
-            document.addEventListener("touchend", function(e){
-                clckd = false;
-            });
             document.addEventListener("mousemove", printMousePos);
-            document.addEventListener("touchmove", function(event){
+            document.addEventListener("mousedown", printMousePos);
+            document.addEventListener("mouseup", printMousePos);
+
+            function printTouchPos(event) {
                 event.preventDefault();
-                if (clckd){
-                    document.getElementById("mousex").innerHTML = event.touches[0].clientX;
-                    document.getElementById("mousey").innerHTML = event.touches[0].clientY;
-                    granny.set("granny.freq.freq", event.touches[0].clientY + 200)
-                    granny.set("granny.freq.add", event.touches[0].clientX + 200)
-                }
-            });
-
-            var granny = flock.synth({
-                synthDef: {
-                    id: "granny",
-                    ugen: "flock.ugen.sinOsc",
-                    freq: {
-                        ugen: "flock.ugen.sinOsc",
-                        freq: 200,
-                        mul: 300,
-                        add: 500
-                    },
-                    mul: {
-                        ugen: "flock.ugen.sinOsc",
-                        mul: 0,
-                        add: 0.5
-                    }
-                }
-            });
-
-            flock.init();
-            granny.play();
+                document.getElementById("mousex").innerHTML = event.touches[0].clientX;
+                document.getElementById("mousey").innerHTML = event.touches[0].clientY;
+                granny.set("granny.freq.freq", event.touches[0].clientY + 200)
+                granny.set("granny.freq.add", event.touches[0].clientX + 200)
+            }
+            document.addEventListener("touchstart", printTouchPos);
+            document.addEventListener("touchmove", printTouchPos);
+            document.addEventListener("touchend", printTouchPos);
         </script>
+
+        <script src="adam.js"></script>
+        <script>
+            var granny = adam.amfm();
+        </script>
+
     </body>
 </html>

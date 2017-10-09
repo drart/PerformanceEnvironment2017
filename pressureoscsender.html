@@ -22,8 +22,6 @@
                 console.log(msg); 
             });
 
-            var clckd = false;
-
             Pressure.set('body', {
                 change: function(force){
                     document.getElementById("pressure").innerHTML = force;
