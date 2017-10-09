@@ -23,7 +23,8 @@ wss.on("connection", function (socket) {
 var flock = require("flocking");
 
 flock.init({
-    chans: 8
+    chans: 8,
+    bufferSize: 128
 });
 
 var adam = require("./adam");

@@ -112,26 +112,25 @@ var boppad = flock.midi.connection({
     listeners: {
         noteOn: function (msg) {
             //console.log(msg);
-            bop.set("bop.mul.gate", 1);
-            setTimeout(function(){
-                bop.set("bop.mul.gate", 0);
-                //console.log(msg);
-                }, 500
-            );
+            //bop.set("bop.mul.gate", 1);
+            $("#boppad-noteon").text(fluid.prettyPrintJSON(msg));
         },
         noteOff: function (msg) {
             //console.log(msg);
-            bop.set("bop.mul.gate", 0);
+            //bop.set("bop.mul.gate", 0);
+            $("#boppad-noteoff").text(fluid.prettyPrintJSON(msg));
         },
         control: function (msg) {
             //console.log(msg);
             //bop.set("bop.mul.gate", 0);
+            $("#boppad-cc").text(fluid.prettyPrintJSON(msg));
         },
         pitchbend: function(msg) {
             console.log(msg);
         },
         aftertouch: function(msg){
-            console.log(msg);
+            //console.log(msg);
+            $("#boppad-aftertouch").text(fluid.prettyPrintJSON(msg));
         }
     }
  
@@ -144,23 +143,27 @@ var quneo = flock.midi.connection({
     },
     listeners: {
         noteOn: function (msg) {
-            console.log(msg);
-            bop.set("bop.freq", Math.pow(2, (msg.note-69)/12) * 440 );
-            bop.set("bop.mul.gate", 1);
+            //console.log(msg);
+            //bop.set("bop.freq", Math.pow(2, (msg.note-69)/12) * 440 );
+            //bop.set("bop.mul.gate", 1);
+            $("#quneo-noteon").text(fluid.prettyPrintJSON(msg));
         },
         noteOff: function (msg) {
             //console.log(msg);
-            bop.set("bop.mul.gate", 0);
+            //bop.set("bop.mul.gate", 0);
+            $("#quneo-noteoff").text(fluid.prettyPrintJSON(msg));
         },
         control: function (msg) {
             //console.log(msg);
             //bop.set("bop.mul.gate", 0);
+            $("#quneo-cc").text(fluid.prettyPrintJSON(msg));
         },
         pitchbend: function(msg) {
             //console.log(msg);
         },
         aftertouch: function(msg){
             //console.log(msg);
+            $("#quneo-aftertouch").text(fluid.prettyPrintJSON(msg));
         }
     }
 });
@@ -172,24 +175,28 @@ var akai = flock.midi.connection({
     },
     listeners: {
         noteOn: function (msg) {
-            console.log(msg);
-	    bop.set("bop.freq", msg.note* 200);
-            bop.set("bop.mul.gate", 1);
+            //console.log(msg);
+            //bop.set("bop.freq", msg.note* 200);
+            //bop.set("bop.mul.gate", 1);
+            $("#akai-noteon").text(fluid.prettyPrintJSON(msg));
         },
         noteOff: function (msg) {
             //console.log(msg);
-            bop.set("bop.mul.gate", 0);
+            //bop.set("bop.mul.gate", 0);
+            $("#akai-noteoff").text(fluid.prettyPrintJSON(msg));
         },
         control: function (msg) {
-            console.log(msg.number);
+            //console.log(msg.number);
             //bop.set("bop.mul.gate", 0);
-	    synths.set(Number( msg.number -1 ).toString() + '.mul', msg.value/ 127);
+            $("#akai-cc").text(fluid.prettyPrintJSON(msg));
+            //synths.set(Number( msg.number -1 ).toString() + '.mul', msg.value/ 127);
         },
         pitchbend: function(msg) {
             console.log(msg);
         },
         aftertouch: function(msg){
-            console.log(msg);
+            $("#akai-aftertouch").text(fluid.prettyPrintJSON(msg));
+            //console.log(msg);
         }
     }
 });

@@ -6,8 +6,9 @@ nx.onload = function(){
 
 	// set this up if myos?	
 	multislider1.setNumberOfSliders(3);
-	multislider1.canvas.hidden = true;
+	//multislider1.canvas.hidden = true;
 
+    /*
     document.getElementById("onoff").onclick = function(val){
         if (this.checked){
             thing1.play();
@@ -15,4 +16,5 @@ nx.onload = function(){
             thing1.pause();
         }
     };
+    */
 };
