@@ -3,5 +3,5 @@ var controller = pads[0];
 if (controller !== null){
 	console.log(controller);
 }else {
-	console.log("no controllers found");
+	console.log("no gamepad controllers found");
 }

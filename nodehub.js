@@ -29,9 +29,10 @@ flock.init({
 var adam = require("./adam");
 var bop = adam.bop();
 
-console.log(adam);
+//bop.play();
+//bop.set("bop.mul.gate", 1);
 
-//var mappings = require("./mapper");
+console.log(adam);
 
 
 /*
@@ -62,5 +63,4 @@ var s = flock.synth({
 });
 
 s.play();
-
 */
