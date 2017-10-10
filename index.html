@@ -1,0 +1,73 @@
+<html>
+    <head>
+        <script src="node_modules/osc/dist/osc-browser.min.js"></script>
+        <script src="node_modules/flocking/dist/flocking-all.js"></script>
+
+        <script>
+            flock.init({
+                chans:8, 
+                bufferSize: 256
+            });
+        </script>
+
+    </head>
+    <body>
+        <script>
+            var oscPort = new osc.WebSocketPort({
+                url: "ws://localhost:9000", // URL to your Web Socket server.
+                metadata: true
+            });
+            oscPort.open();
+            oscPort.on("message", function(msg){
+                console.log(msg); 
+            });
+        </script>
+
+        <div> https://gist.github.com/colinbdclark/0bd443589eec51d0756bff736e6c346d  -- How to use buses</div>
+        <div> https://github.com/colinbdclark/Flocking/issues/8#issuecomment-108712105  --  How to use envGen</div>
+        <div> https://github.com/colinbdclark/Flocking/issues/128 -- changing ugens on the fly</div>
+
+        <input type="checkbox" id="onoff" name="vehicle">
+      
+        <div id="boppad">
+            Boppad
+            <div id="boppad-noteon"></div>
+            <div id="boppad-noteoff"></div>
+            <div id="boppad-cc"></div>
+            <div id="boppad-aftertouch"></div>
+            <div id="boppad-pressure"></div>
+        </div>
+
+        <div id="quneo">
+            Quneo
+            <div id="quneo-noteon"></div>
+            <div id="quneo-noteoff"></div>
+            <div id="quneo-cc"></div>
+            <div id="quneo-aftertouch"></div>
+            <div id="quneo-pressure"></div>
+        </div>
+
+        <div id="akai">
+            Akai 
+            <div id="akai-noteon"></div>
+            <div id="akai-noteoff"></div>
+            <div id="akai-cc"></div>
+            <div id="akai-aftertouch"></div>
+            <div id="akai-pressure"></div>
+        </div>
+
+        <div id="push">
+            Akai 
+            <div id="push-noteon"></div>
+            <div id="push-noteoff"></div>
+            <div id="push-cc"></div>
+            <div id="push-aftertouch"></div>
+            <div id="push-pressure"></div>
+        </div>
+        <script src="gamepads.js"></script>
+        <script src="midicontrollers.js"></script>
+        <script src="adam.js"></script>
+
+    </body>
+</html>
+
