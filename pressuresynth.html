@@ -10,43 +10,56 @@
         <div id="pressure"></div>
         <div id="mousex"></div>
         <div id="mousey"></div>
+        <div id="azimuth"></div>
+        <div id="altitude"></div>
+        <div id="stylus"></div>
         <script>
             flock.init();
             
             Pressure.set('body', {
-                change: function(force){
+                start: function(event){
+                },
+                change: function(force, event){
+                    event.preventDefault();
+                    $("#stylus").text(fluid.prettyPrintJSON(event));
+                    
+                    if (event.touches === undefined){                    
+                        // mouse
+                        granny.set("granny.freq.freq", event.clientY + 200);
+                        granny.set("granny.freq.add", event.clientX + 200);
+                        $("#mousex").text(event.clientX);
+                        $("#mousey").text(event.clientY);
+                    }else{
+                        // touches
+                        //granny.set("granny.freq.freq", event.touches[0].clientY + 200);
+                        //granny.set("granny.freq.add", event.touches[0].clientX + 200);
+                        $("#mousex").text(event.touches[0].clientX);
+                        $("#mousey").text(event.touches[0].clientY);
+                        $("#stylus").text(fluid.prettyPrintJSON(event.touches[0]));
+                        // apple pencil
+                        $("#azimuth").text(event.touches[0].azimuthAngle);
+                        $("#altitude").text(event.touches[0].altitudeAngle);
+                        granny.set("granny.freq.freq", event.touches[0].azimuthAngle * 500);
+                        granny.set("granny.freq.add", event.touches[0].altitudeAngle *  500);
+                    }
+
                     document.getElementById("pressure").innerHTML = force;
                     granny.set("granny.mul.mul", force);
                 }
             });
 
-            function printMousePos(event) {
+            function interactionevent(event){
                 event.preventDefault();
                 if (!flock.enviro.shared.model.isPlaying) {
                     flock.enviro.shared.play();
                 }
-                document.getElementById("mousex").innerHTML = event.clientX;
-                document.getElementById("mousey").innerHTML = event.clientY;
-                granny.set("granny.freq.freq", event.clientY + 200);
-                granny.set("granny.freq.add", event.clientX + 200);
             }
-            document.addEventListener("mousemove", printMousePos);
-            document.addEventListener("mousedown", printMousePos);
-            document.addEventListener("mouseup", printMousePos);
-
-            function printTouchPos(event) {
-                event.preventDefault();
-                if (!flock.enviro.shared.model.isPlaying) {
-                    flock.enviro.shared.play();
-                }
-                document.getElementById("mousex").innerHTML = event.touches[0].clientX;
-                document.getElementById("mousey").innerHTML = event.touches[0].clientY;
-                granny.set("granny.freq.freq", event.touches[0].clientY + 200)
-                granny.set("granny.freq.add", event.touches[0].clientX + 200)
-            }
-            document.addEventListener("touchstart", printTouchPos);
-            document.addEventListener("touchmove", printTouchPos);
-            document.addEventListener("touchend", printTouchPos);
+            document.addEventListener("mousemove", interactionevent);
+            document.addEventListener("mousedown", interactionevent);
+            document.addEventListener("mouseup", interactionevent);
+            document.addEventListener("touchstart", interactionevent);
+            document.addEventListener("touchmove", interactionevent);
+            document.addEventListener("touchend", interactionevent);
         </script>
 
         <script src="adam.js"></script>
