@@ -91,6 +91,21 @@
                 }
     });
 
+    fluid.defaults("adam.dusty", {
+        gradeNames: ["flock.synth", "autoInit"],
+        synthDef: {
+            ugen: "flock.ugen.dust",
+            density: {
+                ugen: "flock.ugen.sinOsc",
+                freq: .05,
+                mul: 50,
+                add: 50,
+            },
+            mul: 0.25
+        }
+    });
+
+
     // detect node.js environement
     if (typeof module !== 'undefined' && module.exports) {
         fluid.module.register("adam", __dirname, require);
