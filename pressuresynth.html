@@ -73,6 +73,14 @@
         <script src="adam.js"></script>
         <script>
             var granny = adam.amfm();
+            var liner = {
+                ugen: "flock.ugen.line",
+                start: 0,
+                end: 0.5,
+                duration: 10
+            };
+            granny.set("granny.mul.add", 0);
+            granny.set("granny.mul.mul", liner);
         </script>
 
     </body>

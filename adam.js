@@ -221,7 +221,40 @@
         }
     }
 
-
+    // from hexapod
+    fluid.defaults("adam.stereoclick", {
+        gradeNames: ["flock.synth", "autoInit"], 
+        synthDef: [
+        {
+            id: "cl",
+            ugen: "flock.ugen.filter.biquad.lp",
+            freq: {
+                ugen: "flock.ugen.sinOsc",
+                freq: 0.2, 
+                add: 5000, 
+                mul: 1200,
+            },
+            source: {
+                ugen: "flock.ugen.impulse",
+                freq: 4,
+            }
+        },
+        {
+            id: "cr",
+            ugen: "flock.ugen.filter.biquad.lp",
+            freq: {
+                ugen: "flock.ugen.sinOsc",
+                add: 4000, 
+                mul: 1000, 
+                freq: 0.25
+            }, 
+            source: {
+                ugen: "flock.ugen.impulse",
+                freq: 4,
+            }
+        } 
+        ]
+    });
 
     // detect node.js environement
     if (typeof module !== 'undefined' && module.exports) {
