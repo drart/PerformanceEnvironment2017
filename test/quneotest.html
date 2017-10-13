@@ -6,33 +6,14 @@
 <body>
     <div id="boppad-midi-display"></div>
     <script src="../node_modules/flocking/dist/flocking-all.js"></script>
+    <script src="../adam.js"></script>
     <script>
 
         flock.init({
             bufferSize : 256 
         });
 
-        var cloosh = flock.synth({
-            synthDef: {
-                id: "freeverb",
-                ugen: "flock.ugen.freeverb",
-                source: {
-                    id: "boop",
-                    ugen: "flock.ugen.sinOsc",
-                    freq: 500,
-                    mul: {
-                        id : "env",
-                        ugen: "flock.ugen.envGen",
-                        rate: "control",
-                        envelope: {
-                            levels: [0, 1, 0],
-                            times: [0.01, 0.5],
-                            curve: ["exponential", "exponential"]
-                        }
-                    }
-                }
-            }  
-        });
+        var cloosh = adam.cloosh();
         cloosh.play();
 
         var boppad = flock.midi.connection({

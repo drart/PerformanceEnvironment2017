@@ -105,7 +105,29 @@
         }
     });
 
-
+    fluid.defaults("adam.cloosh", {
+        gradeNames: ["flock.synth", "autoInit"],
+        synthDef: {
+            id: "freeverb",
+            ugen: "flock.ugen.freeverb",
+                source: {
+                    id: "boop",
+                    ugen: "flock.ugen.sinOsc",
+                    freq: 500,
+                mul: {
+                    id : "env",
+                    ugen: "flock.ugen.envGen",
+                    rate: "control",
+                    envelope: {
+                        levels: [0, 1, 0],
+                        times: [0.01, 0.5],
+                        curve: ["exponential", "exponential"]
+                    }
+                }
+            }
+        }  
+    });
+    
     // detect node.js environement
     if (typeof module !== 'undefined' && module.exports) {
         fluid.module.register("adam", __dirname, require);
