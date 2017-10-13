@@ -16,6 +16,11 @@
         var cloosh = adam.cloosh();
         cloosh.play();
 
+        var octopus = adam.octopus();
+        octopus.set("f1.freq", 800);
+        octopus.play()
+
+
         var boppad = flock.midi.connection({
             openImmediately: true,
             ports: {
