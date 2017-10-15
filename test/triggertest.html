@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<head>
+    <title>Trigger Quneo</title>
+</head>
+
+<body>
+    <div id="boppad-midi-display"></div>
+    <script src="../node_modules/flocking/dist/flocking-all.js"></script>
+    <script>
+        flock.init({
+            bufferSize : 256 
+        });
+
+
+        var beat = flock.synth({
+            synthDef:{
+                id: "mysample",
+                ugen: "flock.ugen.playBuffer",
+                buffer: {
+                    id: "beat",
+                    url: "../beat1.wav"
+                },
+                        trigger: {
+                                        id: "trig",
+                                        ugen: "flock.ugen.valueChangeTrigger",
+                                        source: 0
+                                                }
+            }
+        });
+
+        var boppad = flock.midi.connection({
+            openImmediately: true,
+            ports: {
+                name : "QUNEO"
+            },
+            listeners: {
+                noteOn: function (msg) {
+                    $("#boppad-midi-display").text(fluid.prettyPrintJSON(msg));
+                    if (msg.note >= 68 && msg.note <= 83){
+                    }
+                },
+                noteOff: function (msg) {
+                    $("#boppad-midi-display").text(fluid.prettyPrintJSON(msg));
+                },
+                control: function (msg) {
+                    $("#boppad-midi-display").text(fluid.prettyPrintJSON(msg));
+                    if(msg.number === 10){
+                    }
+                    if(msg.number === 6){
+                    }
+                    if(msg.number === 7){
+                    }
+                    if(msg.number === 8){
+                    }
+                    if(msg.number === 9){
+                    }
+                    if(msg.number === 0){
+                    }
+                    if(msg.number === 1){
+                    }
+                    if(msg.number === 2){
+                    }
+                },
+                pitchbend: function(msg) {
+                    $("#boppad-midi-display").text(fluid.prettyPrintJSON(msg));
+                },
+                aftertouch: function(msg){
+                    $("#boppad-midi-display").text(fluid.prettyPrintJSON(msg));
+                }
+            }
+
+        });
+    </script>
+</body>
+</html>
