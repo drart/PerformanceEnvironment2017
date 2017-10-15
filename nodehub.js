@@ -30,10 +30,28 @@ flock.init({
 var adam = require("./adam");
 var bop = adam.bop();
 
+var octopus = adam.octopus();
+
+octopus.set("f1.mul", 0.1);
+octopus.set("f2.mul", 0.1);
+octopus.set("f3.mul", 0.1);
+octopus.set("f4.mul", 0.1);
+
+octopus.set("f1.freq", 100);
+octopus.set("f2.freq", 200);
+octopus.set("f3.freq", 300);
+octopus.set("f4.freq", 400);
+
+octopus.scatter();
+
+octopus.play();
+
+
 //bop.play();
 //bop.set("bop.mul.gate", 1);
 
 console.log(adam);
+console.log(flock.enviro.shared.audioSystem.model.chans);
 
 
 /*

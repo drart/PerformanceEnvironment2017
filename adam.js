@@ -132,10 +132,12 @@
         gradeNames: ["flock.synth", "autoInit"],
         invokers: {
             scatter: {
-                funcName: "adam.octopus.scatterfreqs"
+                funcName: "adam.octopus.scatterfreqs", 
+                args: ["{arguments}.0", "{that}"]
             },
             scatterratio: {
-                funcName: "adam.octopus.ratiofader"
+                funcName: "adam.octopus.ratiofader",
+                args: ["{arguments}.0", "{arguments}.1", "{arguments}.2", "{that}"]
             }
         },
         synthDef: [
@@ -191,33 +193,36 @@
     });
 
 
-    adam.octopus.scatterfreqs = function(t){
+    adam.octopus.scatterfreqs = function(t, that){
+        var that = that;
         var freqs = [];
         for (var i = 0 ; i<  8; i++){
             //octopus.set("f"+(i+1)+".freq", Math.random() * 1000);
-            freqs[i] = (typeof  octopus.get("f"+(i+1)+".freq") !== 'object') ? octopus.get("f"+(i+1)+".freq"): octopus.get("f"+(i+1)+".freq.end");
+            freqs[i] = (typeof  that.get("f"+(i+1)+".freq") !== 'object') ? that.get("f"+(i+1)+".freq"): that.get("f"+(i+1)+".freq.end");
         }
-        console.log(freqs);
+        //console.log(freqs);
         t  = t || 10;
-        console.log(t);
+        //console.log(t);
+        freqs.sort(function(){return .5 - Math.random()})
+        //console.log(freqs);
         for ( var i = 0 ; i < 8; i++){
             //var temp = Math.floor(Math.random() * freqs.length);
-            freqs.sort(function(){return .5 - Math.random()})
             var x = freqs.pop();
-            var yy = (typeof  octopus.get("f"+(i+1)+".freq") !== 'object') ? octopus.get("f"+(i+1)+".freq"): octopus.get("f"+(i+1)+".freq.end");
+            var yy = (typeof  that.get("f"+(i+1)+".freq") !== 'object') ? that.get("f"+(i+1)+".freq"): that.get("f"+(i+1)+".freq.end");
             var xx = {ugen:"flock.ugen.line", start: yy, end:x, duration: t};
             console.log(xx);
-            octopus.set("f"+(i+1)+".freq", xx);
+            that.set("f"+(i+1)+".freq", xx);
         }
     }
-    adam.octopus.ratiofader = function (v,r,t){
+    adam.octopus.ratiofader = function (v,r,t,that){
+        var that = that;
         t = t || 1;
         for ( var i = 0; i < 8; i++){
-            var yy = (typeof  octopus.get("f"+(i+1)+".freq") !== 'object') ? octopus.get("f"+(i+1)+".freq"): octopus.get("f"+(i+1)+".freq.end");
+            var yy = (typeof  that.get("f"+(i+1)+".freq") !== 'object') ? that.get("f"+(i+1)+".freq"): that.get("f"+(i+1)+".freq.end");
             var xx = {ugen:"flock.ugen.line", start: yy, end:v, duration: t};
-            octopus.set("f"+(i+1)+".freq", xx);
+            that.set("f"+(i+1)+".freq", xx);
             v *= r;
-            console.log( octopus.get("f"+(i+1)+".freq"));
+            console.log( that.get("f"+(i+1)+".freq"));
         }
     }
 
