@@ -256,6 +256,104 @@
         ]
     });
 
+fluid.defaults("adam.randomstereobass", {
+gradeNames: ["flock.synth", "autoInit"], 
+    synthDef: [{
+        ugen: "flock.ugen.square",
+        id: "tester",
+        freq: {
+            ugen: "flock.ugen.lfNoise",
+            freq: 0.25,
+            mul: 20,
+            add: 30
+        },
+        mul: {
+            ugen: "flock.ugen.envGen",
+            envelope: {
+                type: "flock.envelope.sin",
+                duration: 2
+            },
+            gate: {
+                ugen: "flock.ugen.lfPulse",
+                width: 0.5,
+                freq: 0.25
+            }
+        }
+    },
+    {
+        ugen: "flock.ugen.saw",
+        id: "tester",
+        freq: {
+            ugen: "flock.ugen.lfNoise",
+            freq: 0.25,
+            mul: 20,
+            add: 30
+        },
+        mul: {
+            ugen: "flock.ugen.envGen",
+            envelope: {
+                type: "flock.envelope.sin",
+                duration: 2
+            },
+            gate: {
+                ugen: "flock.ugen.lfPulse",
+                width: 0.5,
+                freq: 0.25
+            }
+        }
+    }
+    ]
+});
+
+fluid.defaults("adam.lowgranny", {
+gradeNames: ["flock.synth", "autoInit"], 
+   synthDef: {
+       ugen: "flock.ugen.granulator",
+       numGrains: {
+           ugen: "flock.ugen.lfSaw",
+           freq: 0.17283,
+           add: 20,
+           mul: 19
+       },
+       grainDur: {
+           ugen: "flock.ugen.lfSaw",
+           add: 0.5,
+           mul: 0.4,
+           freq: 0.0184
+       },
+       delayDur: 8,
+       mul: 0.5,
+       source: {
+           ugen: "flock.ugen.filter.biquad.lp",
+           q: 2,
+           freq: {
+               ugen: "flock.ugen.sin",
+               rate: "control",
+               freq: {
+                   ugen: "flock.ugen.lfSaw",
+                   add: 500,
+                   mul: 200,
+                   freq: 0.018214124
+               },
+               phase: 0,
+               mul: 1000,
+               add: 2000
+           },
+           source: {
+               ugen: "flock.ugen.lfSaw",
+               freq: {
+                   ugen: "flock.ugen.sin",
+                   freq: 0.08263,
+                   mul: 100,
+                   add: 300,
+               },
+               mul: 0.25
+           }
+       }
+   }
+});
+
+
     // detect node.js environement
     if (typeof module !== 'undefined' && module.exports) {
         fluid.module.register("adam", __dirname, require);

@@ -16,3 +16,4 @@ Stuff to do
 - https://dzone.com/articles/exploring-html5-web-audio
 - Add in a digital mixer compatibility
 - Add in a drum interface
+- add an iMS-20 mapping
