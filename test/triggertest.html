@@ -20,11 +20,14 @@
                     id: "beat",
                     url: "../beat1.wav"
                 },
-                        trigger: {
-                                        id: "trig",
-                                        ugen: "flock.ugen.valueChangeTrigger",
-                                        source: 0
-                                                }
+                trigger: {
+                    id: "trig",
+                    ugen: "flock.ugen.valueChangeTrigger",
+                    options:{
+                        triggerOnSetSameValue: false
+                    },
+                    source: 0
+                }
             }
         });
 
