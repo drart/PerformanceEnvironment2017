@@ -200,3 +200,27 @@ var akai = flock.midi.connection({
         }
     }
 });
+
+var bcr2000 = flock.midi.connection({
+    openImmediately: true,
+    ports: {
+        name : "BCF2000 MIDI 1"
+    },
+    listeners: {
+        noteOn: function (msg) {
+            $("#bcr2000-noteon").text(fluid.prettyPrintJSON(msg));
+        },
+        noteOff: function (msg) {
+            $("#bcr2000-noteoff").text(fluid.prettyPrintJSON(msg));
+        },
+        control: function (msg) {
+            $("#bcr2000-cc").text(fluid.prettyPrintJSON(msg));
+        },
+        pitchbend: function(msg) {
+            console.log(msg);
+        },
+        aftertouch: function(msg){
+            $("#bcr2000-aftertouch").text(fluid.prettyPrintJSON(msg));
+        }
+    }
+});
