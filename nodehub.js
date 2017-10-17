@@ -11,6 +11,7 @@ wss.on("connection", function (socket) {
 
     // work on this
     socketPort.on("message", function (oscMsg) {
+        console.log(oscMsg);
         if (oscMsg.address === "/pressurexy"){
             console.log(typeof oscMsg.args[0].value);
             s.set("tester.freq.freq", oscMsg.args[0].value + 1 );
