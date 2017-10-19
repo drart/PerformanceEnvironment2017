@@ -204,7 +204,7 @@ var akai = flock.midi.connection({
 var bcr2000 = flock.midi.connection({
     openImmediately: true,
     ports: {
-        name : "BCF2000 MIDI 1"
+        name : "BCF2000 Port 1"
     },
     listeners: {
         noteOn: function (msg) {
@@ -215,6 +215,21 @@ var bcr2000 = flock.midi.connection({
         },
         control: function (msg) {
             $("#bcr2000-cc").text(fluid.prettyPrintJSON(msg));
+            if(msg.number ===81){
+                octopus.set("f1.mul", msg.value / 127);
+            }
+            if(msg.number ===82){
+                octopus.set("f2.mul", msg.value / 127);
+            }
+            if(msg.number ===83){
+                octopus.set("f3.mul", msg.value / 127);
+            }
+            if(msg.number ===84){
+                octopus.set("f4.mul", msg.value / 127);
+            }
+            if(msg.number ===85){
+                octopus.set("f5.mul", msg.value / 127);
+            }
         },
         pitchbend: function(msg) {
             console.log(msg);

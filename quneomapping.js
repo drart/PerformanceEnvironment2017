@@ -45,6 +45,7 @@ flock.init({
                     if(msg.number === 10){
                         cloosh.set("freeverb.mix", msg.value/127 );
                     }
+                    /*
                     if(msg.number === 6){
                         octopus.set("f1.mul", msg.value/ 127);
                         octopus.set("f5.mul", msg.value/ 127);
@@ -61,6 +62,7 @@ flock.init({
                         octopus.set("f4.mul", msg.value/ 127);
                         octopus.set("f8.mul", msg.value/ 127);
                     }
+                    */
                     if(msg.number === 0){
                         t = msg.value / 4;
                     }

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<head>
+    <title>Trigger sounds</title>
+</head>
+
+<body>
+    <!--input type="range" min="0" max="1000" id="slidey"-->
+
+    <script src="node_modules/flocking/dist/flocking-all.js"></script>
+    <script>
+        flock.init({
+            bufferSize : 256 
+        });
+/*
+        var grandrone = flock.synth({
+            synthDef:{
+                id: "mysample",
+                ugen: "flock.ugen.playBuffer",
+                buffer: {
+                    id: "beat",
+                    url: "grandrone.wav"
+                },
+                loop: 1,
+                start: 0,
+                end: 1,
+                mul: 0
+            }
+        });
+*/
+        var freezer = flock.synth({
+            synthDef:{
+                id: "mysample",
+                ugen: "flock.ugen.playBuffer",
+                buffer: {
+                    id: "beat",
+                    url: "freezer.wav"
+                },
+                loop: 1,
+                start: 0,
+                end: 1,
+                mul: 0
+            }
+        });
+
+/*
+        var cymbal = flock.synth({
+            synthDef:{
+                id: "mysample",
+                ugen: "flock.ugen.playBuffer",
+                buffer: {
+                    id: "beat",
+                    url: "cymballike.wav"
+                },
+                loop: 1,
+                start: 0,
+                end: 1,
+                mul: 0
+            }
+        });
+
+        var newdrone = flock.synth({
+            synthDef:{
+                id: "mysample",
+                ugen: "flock.ugen.playBuffer",
+                buffer: {
+                    id: "beat",
+                    url: "newdrone.wav"
+                },
+                loop: 1,
+                start: 0,
+                end: 1,
+                mul: 0
+            }
+        });
+*/
+
+
+        //newdrone.play();
+        freezer.play();
+        //cymbal.play();
+        //grandrone.play();
+    </script>
+    <script>
+    /*
+    document.getElementById("slidey").onchange = function(e){
+     console.log(this.value);
+     cymbal.set("mysample.mul", this.value/1000);
+    };
+    */
+
+    var fadein = {
+        ugen: "flock.ugen.line",
+        start: 0, 
+        end: 1, 
+        duration: 30
+    }
+
+    var fadeout = {
+        ugen: "flock.ugen.line",
+        start: 1, 
+        end: 0, 
+        duration: 30
+    }
+
+    </script>
+    
+
+</body>
+</html>
