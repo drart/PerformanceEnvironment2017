@@ -192,7 +192,6 @@
         ]
     });
 
-
     adam.octopus.scatterfreqs = function(t, that){
         var that = that;
         var freqs = [];
@@ -214,6 +213,7 @@
             that.set("f"+(i+1)+".freq", xx);
         }
     }
+
     adam.octopus.ratiofader = function (v,r,t,that){
         var that = that;
         t = t || 1;
@@ -229,6 +229,16 @@
     // from hexapod
     fluid.defaults("adam.stereoclick", {
         gradeNames: ["flock.synth", "autoInit"], 
+        invokers: {
+            split: {
+                funcName: "adam.stereoclick.split", 
+                args: ["{that}"]
+            },
+            slide: {
+                funcName: "adam.stereoclick.slide",
+                args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"]
+            }
+        },
         synthDef: [
         {
             id: "cl",
@@ -241,7 +251,7 @@
             },
             source: {
                 ugen: "flock.ugen.impulse",
-                freq: 4,
+                freq: 3,
             }
         },
         {
@@ -255,11 +265,30 @@
             }, 
             source: {
                 ugen: "flock.ugen.impulse",
-                freq: 4,
+                freq: 3,
             }
         } 
         ]
     });
+    adam.stereoclick.split = function(that){
+        that.set("cr.source.phase", 0.5);
+    }
+    adam.stereoclick.slide = function(that, start, end, duration){
+        var d = duration || 10;
+        var e = end || 0.5;
+        var s = start || 0;
+        
+
+        var liner = {
+            "ugen" : "flock.ugen.line",
+            "duration" : d,
+            "start" : s,
+            "end" : e 
+        };
+        console.log(liner);
+
+        that.set("cr.source.phase", liner);
+    }
 
 fluid.defaults("adam.randomstereobass", {
 gradeNames: ["flock.synth", "autoInit"], 
