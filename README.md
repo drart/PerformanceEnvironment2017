@@ -4,7 +4,7 @@ Performance Environment 2017
 This is a Flocking.js project to collect my synths, mappings, and other ideas together in one place. The idea is to have it all ready to go in both a browser and node.js scenario. 
 
 - index.html: browser based hub (still working on a websockets solution)
-- nodehub.js: node.js based hub 
+- nodehub.js: node.js based hub (useful for multichannel with classs compliant audio devices)
 - pressuresynth.html: playing with pressure.js for 3D Touch and Apple Pencil
 - applepencil.html: WIP pencil to OSC sender (values on screen, need to add OSC)
 - pressureoscsender.html: sends pressure.js mouse, touch, and pointer via OSC
@@ -17,3 +17,4 @@ Stuff to do
 - Add in a digital mixer compatibility
 - Add in a drum interface
 - add an iMS-20 mapping
+- ugen.scope for monitoring output
