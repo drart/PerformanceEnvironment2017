@@ -230,6 +230,18 @@ var bcr2000 = flock.midi.connection({
             if(msg.number ===85){
                 octopus.set("f5.mul", msg.value / 127);
             }
+            if(msg.number === 89){
+                octopus.scatter();
+            }
+            if(msg.number === 90){
+                octopus.scatterratio(300,1.06,30);
+            }
+            if(msg.number === 91){
+                octopus.scatterratio(305,1.06* 1.06,30);
+            }
+            if(msg.number === 92){
+                octopus.scatterratio(299,1.04,30);
+            }
         },
         pitchbend: function(msg) {
             console.log(msg);
@@ -239,3 +251,21 @@ var bcr2000 = flock.midi.connection({
         }
     }
 });
+
+
+/*
+ * // the future!!!
+fluid.defaults("adam.midi.bcr2000", {
+    gradeNames: "flock.midi.connection",
+
+    listeners: {
+        "noteOn.domoreimportantthing": "{synth}.set(awesome.ugen, 440)",
+
+        "noteOn.logNoteValue" : {
+            priority: "after:domoreimportantthing",
+            
+            
+        }
+    }
+});
+*/

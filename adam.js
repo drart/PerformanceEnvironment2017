@@ -119,7 +119,7 @@
                     ugen: "flock.ugen.envGen",
                     rate: "control",
                     envelope: {
-                        levels: [0, 1, 0],
+                        levels: [0, 0.45, 0],
                         times: [0.01, 0.5],
                         curve: ["exponential", "exponential"]
                     }
@@ -237,6 +237,10 @@
             slide: {
                 funcName: "adam.stereoclick.slide",
                 args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"]
+            },
+            splitsimple: {
+                func: "{that}.set",
+                args: ["cr.source.phase", 0.5]
             }
         },
         synthDef: [
@@ -273,11 +277,11 @@
     adam.stereoclick.split = function(that){
         that.set("cr.source.phase", 0.5);
     }
+    
     adam.stereoclick.slide = function(that, start, end, duration){
         var d = duration || 10;
         var e = end || 0.5;
         var s = start || 0;
-        
 
         var liner = {
             "ugen" : "flock.ugen.line",
@@ -286,107 +290,151 @@
             "end" : e 
         };
         console.log(liner);
-
         that.set("cr.source.phase", liner);
     }
-
-fluid.defaults("adam.randomstereobass", {
-gradeNames: ["flock.synth", "autoInit"], 
-    synthDef: [{
-        ugen: "flock.ugen.square",
-        id: "tester",
-        freq: {
-            ugen: "flock.ugen.lfNoise",
-            freq: 0.25,
-            mul: 20,
-            add: 30
-        },
-        mul: {
-            ugen: "flock.ugen.envGen",
-            envelope: {
-                type: "flock.envelope.sin",
-                duration: 2
-            },
-            gate: {
-                ugen: "flock.ugen.lfPulse",
-                width: 0.5,
-                freq: 0.25
-            }
+    
+    // new overriding     
+    fluid.defaults("adam.superstereoclick", {
+        gradeNames: ['adam.stereoclick'] ,
+        invokers : {
+            splitsimple: {
+                args: ["cr.source.phase", 0.1] 
+             }
         }
-    },
-    {
-        ugen: "flock.ugen.saw",
-        id: "tester",
-        freq: {
-            ugen: "flock.ugen.lfNoise",
-            freq: 0.25,
-            mul: 20,
-            add: 30
-        },
-        mul: {
-            ugen: "flock.ugen.envGen",
-            envelope: {
-                type: "flock.envelope.sin",
-                duration: 2
-            },
-            gate: {
-                ugen: "flock.ugen.lfPulse",
-                width: 0.5,
-                freq: 0.25
-            }
-        }
-    }
-    ]
-});
+    });
 
-fluid.defaults("adam.lowgranny", {
-gradeNames: ["flock.synth", "autoInit"], 
-   synthDef: {
-       ugen: "flock.ugen.granulator",
-       numGrains: {
-           ugen: "flock.ugen.lfSaw",
-           freq: 0.17283,
-           add: 20,
-           mul: 19
-       },
-       grainDur: {
-           ugen: "flock.ugen.lfSaw",
-           add: 0.5,
-           mul: 0.4,
-           freq: 0.0184
-       },
-       delayDur: 8,
-       mul: 0.5,
-       source: {
-           ugen: "flock.ugen.filter.biquad.lp",
-           q: 2,
-           freq: {
-               ugen: "flock.ugen.sin",
-               rate: "control",
-               freq: {
-                   ugen: "flock.ugen.lfSaw",
-                   add: 500,
-                   mul: 200,
-                   freq: 0.018214124
-               },
-               phase: 0,
-               mul: 1000,
-               add: 2000
-           },
-           source: {
+    fluid.defaults("adam.bass.randomstereo", {
+        gradeNames: ["flock.synth", "autoInit"], 
+            synthDef: [{
+                ugen: "flock.ugen.square",
+                id: "tester",
+                freq: {
+                    ugen: "flock.ugen.lfNoise",
+                    freq: 0.25,
+                    mul: 20,
+                    add: 30
+                },
+                mul: {
+                    ugen: "flock.ugen.envGen",
+                    envelope: {
+                        type: "flock.envelope.sin",
+                        duration: 2
+                    },
+                    gate: {
+                        ugen: "flock.ugen.lfPulse",
+                        width: 0.5,
+                        freq: 0.25
+                    }
+                }
+            },
+            {
+                ugen: "flock.ugen.saw",
+                id: "tester",
+                freq: {
+                    ugen: "flock.ugen.lfNoise",
+                    freq: 0.25,
+                    mul: 20,
+                    add: 30
+                },
+                mul: {
+                    ugen: "flock.ugen.envGen",
+                    envelope: {
+                        type: "flock.envelope.sin",
+                        duration: 2
+                    },
+                    gate: {
+                        ugen: "flock.ugen.lfPulse",
+                        width: 0.5,
+                        freq: 0.25
+                    }
+                }
+            }
+            ]
+    });
+
+    fluid.defaults("adam.lowgranny", {
+    gradeNames: ["flock.synth", "autoInit"], 
+       synthDef: {
+           ugen: "flock.ugen.granulator",
+           numGrains: {
                ugen: "flock.ugen.lfSaw",
+               freq: 0.17283,
+               add: 20,
+               mul: 19
+           },
+           grainDur: {
+               ugen: "flock.ugen.lfSaw",
+               add: 0.5,
+               mul: 0.4,
+               freq: 0.0184
+           },
+           delayDur: 8,
+           mul: 0.5,
+           source: {
+               ugen: "flock.ugen.filter.biquad.lp",
+               q: 2,
                freq: {
                    ugen: "flock.ugen.sin",
-                   freq: 0.08263,
-                   mul: 100,
-                   add: 300,
+                   rate: "control",
+                   freq: {
+                       ugen: "flock.ugen.lfSaw",
+                       add: 500,
+                       mul: 200,
+                       freq: 0.018214124
+                   },
+                   phase: 0,
+                   mul: 1000,
+                   add: 2000
                },
-               mul: 0.25
+               source: {
+                   ugen: "flock.ugen.lfSaw",
+                   freq: {
+                       ugen: "flock.ugen.sin",
+                       freq: 0.08263,
+                       mul: 100,
+                       add: 300,
+                   },
+                   mul: 0.25
+               }
            }
        }
-   }
-});
+    });
 
+    fluid.defaults("adam.bass.stereodistortionphasing", {
+        gradeNames: ["flock.synth", "autoInit"],
+        synthDef: [{
+                ugen: "flock.ugen.distortion.deJonge",
+                amount: {
+                    ugen: "flock.ugen.sin",
+                    mul: 99,
+                    add: 100,
+                    freq: 0.1,
+                },
+                source: {
+                    ugen: "flock.ugen.sawOsc",
+                    freq: {
+                        ugen: "flock.ugen.sin",
+                        add: 45, 
+                        freq: .25
+                    }, 
+                    mul: 0.01
+                }
+            },
+            {
+                ugen: "flock.ugen.distortion.deJonge",
+                amount: {
+                    ugen: "flock.ugen.sin",
+                    mul: 49,
+                    add: 50,
+                    freq: 0.11,
+                },
+                source: {
+                    ugen: "flock.ugen.sawOsc",
+                    freq: 45.3456, 
+                    mul: 0.01
+                }   
+            }]
+    });
 
     // detect node.js environement
     if (typeof module !== 'undefined' && module.exports) {
