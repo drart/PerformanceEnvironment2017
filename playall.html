@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<head>
+    <title>Trigger sounds</title>
+</head>
+
+<body>
+    <!--input type="range" min="0" max="1000" id="slidey"-->
+
+    <script src="node_modules/flocking/dist/flocking-all.js"></script>
+    <script>
+        flock.init();
+        
+        fluid.defaults("adam.bufferPlayingSynth", {
+            gradeNames: "flock.synth",
+
+            bufferUrl: "fluid.mustBeOverridden",
+
+            synthDef: {
+                id: "mysample",
+                ugen: "flock.ugen.playBuffer",
+                buffer: {
+                    url: "{that}.options.bufferUrl"
+                },
+                loop: 1,
+                start: 0,
+                end: 1,
+                mul: 0
+            }
+        });
+
+        fluid.defaults("adam.bufferBand", {
+            gradeNames: "flock.band",
+
+            components: {
+                grandroneSynth: {
+
+                    type: "adam.bufferPlayingSynth",
+                    options: {
+                        bufferUrl: "grandrone.wav"
+                    }
+                },
+
+                freezerSynth: {
+                    type: "adam.bufferPlayingSynth",
+                    options: {
+                        bufferUrl: "freezer.wav"
+                    }
+                }
+            }
+
+        });
+
+        var fadein = {
+            ugen: "flock.ugen.line",
+            start: 0, 
+            end: 1, 
+            duration: 30
+        }
+
+        var fadeout = {
+            ugen: "flock.ugen.line",
+            start: 1, 
+            end: 0, 
+            duration: 30
+        }
+
+        var bigband = adam.bufferBand();
+        bigband.freezerSynth.set('mysample.mul', fadein);
+
+        flock.enviro.shared.play();
+    </script>
+    
+
+</body>
+</html>
