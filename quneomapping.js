@@ -12,7 +12,7 @@ flock.init({
         var r = 1.01;
         var v = 300;
 
-        var boppad = flock.midi.connection({
+        quneo = flock.midi.connection({
             openImmediately: true,
             ports: {
                 name : "QUNEO"
@@ -29,12 +29,14 @@ flock.init({
                         //cloosh.set("freeverb.mix", Math.sin(myval));
                         cloosh.set("freeverb.width", Math.sin(myval));
                     }
+                    /*
                     if(msg.note === 25){
                         octopus.scatter();
                     }
                     if(msg.note === 26){
                         octopus.scatterratio(v,r,t);
                     }
+                    */
                 },
                 noteOff: function (msg) {
                     $("#boppad-midi-display").text(fluid.prettyPrintJSON(msg));
@@ -78,7 +80,14 @@ flock.init({
                 },
                 aftertouch: function(msg){
                     $("#boppad-midi-display").text(fluid.prettyPrintJSON(msg));
-                }
+                },
             }
 
         });
+
+
+
+quneo.events.onReady.addListener( function(){
+    console.log("it's ready");
+});
+
