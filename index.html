@@ -31,10 +31,10 @@
 
         <hr>
 
-        <input type="checkbox" id="sf1" name="sf1">Sound File 1 </input>
-        <input type="checkbox" id="sf2" name="sf2">Sound File 2 </input>
-        <input type="checkbox" id="sf3" name="sf3">Sound File 3 </input>
-        <input type="checkbox" id="sf4" name="sf4">Sound File 4 </input>
+        <input type="checkbox" id="sf1" name="sf1">Cymbal Drone</input>
+        <input type="checkbox" id="sf2" name="sf2">Other Drone</input>
+        <input type="checkbox" id="sf3" name="sf3">Granular Bass </input>
+        <input type="checkbox" id="sf4" name="sf4">Freezer </input>
 
         <hr>
 
@@ -97,103 +97,35 @@
         <script src="quneomapping.js"></script>
 
         <script>
-            // bad temporary version. moving playall.html to here for now
 
-            var grandrone = flock.synth({
-                synthDef:{
-                    id: "mysample",
-                    ugen: "flock.ugen.playBuffer",
-                    buffer: {
-                        url: "grandrone.wav"
-                    },
-                    loop: 1,
-                    start: 0,
-                    end: 1,
-                    mul: 0
-                }
-            });
-            var freezer = flock.synth({
-                synthDef:{
-                    id: "mysample",
-                    ugen: "flock.ugen.playBuffer",
-                    buffer: {
-                        url: "freezer.wav"
-                    },
-                    loop: 1,
-                    start: 0,
-                    end: 1,
-                    mul: 0
-                }
-            });
-
-            var cymbal = flock.synth({
-                synthDef:{
-                    id: "mysample",
-                    ugen: "flock.ugen.playBuffer",
-                    buffer: {
-                        url: "cymballike.wav"
-                    },
-                    loop: 1,
-                    start: 0,
-                    end: 1,
-                    mul: 0
-                }
-            });
-
-            var newdrone = flock.synth({
-                synthDef:{
-                    id: "mysample",
-                    ugen: "flock.ugen.playBuffer",
-                    buffer: {
-                        url: "newdrone.wav"
-                    },
-                    loop: 1,
-                    start: 0,
-                    end: 1,
-                    mul: 0
-                }
-            });
-
-        var fadein = {
-            ugen: "flock.ugen.line",
-            start: 0, 
-            end: 1, 
-            duration: 30
-        }
-
-        var fadeout = {
-            ugen: "flock.ugen.line",
-            start: 1, 
-            end: 0, 
-            duration: 30
-        }
+        var drones = adam.bufferBand();
 
         document.getElementById('sf1').addEventListener('change', function(event){
             if (this.checked){
-                cymbal.set('mysample.mul', fadein);
+                drones.cymbal.fadein();
             }else{
-                cymbal.set('mysample.mul', fadeout);
+                drones.cymbal.fadeout();
             }
         });
         document.getElementById('sf2').addEventListener('change', function(event){
             if (this.checked){
-                newdrone.set('mysample.mul', fadein);
+                drones.newdrone.fadein();
             }else{
-                newdrone.set('mysample.mul', fadeout);
+                drones.newdrone.fadeout();
             }
         });
-        document.getElementById('sf1').addEventListener('change', function(event){
+        document.getElementById('sf3').addEventListener('change', function(event){
             if (this.checked){
-                grandrone.set('mysample.mul', fadein);
+                drones.grandrone.fadein();
             }else{
-                grandrone.set('mysample.mul', fadeout);
+                drones.grandrone.fadeout();
             }
         });
-        document.getElementById('sf1').addEventListener('change', function(event){
+        document.getElementById('sf4').addEventListener('change', function(event){
             if (this.checked){
-                freezer.set('mysample.mul', fadein);
+                drones.freezer.fadein();
             }else{
-                freezer.set('mysample.mul', fadeout);
+                drones.freezer.fadeout();
             }
         });
         </script>

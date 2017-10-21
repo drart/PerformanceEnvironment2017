@@ -436,6 +436,79 @@
             }]
     });
 
+    ///////////////////////////////
+    /// buffers
+    ///////////////////////////////
+    fluid.defaults("adam.bufferPlayingSynth", {
+        gradeNames: "flock.synth",
+        bufferUrl: "fluid.mustBeOverridden",
+        synthDef: {
+            id: "mysample",
+            ugen: "flock.ugen.playBuffer",
+            buffer: {
+                url: "{that}.options.bufferUrl"
+            },
+            loop: 1,
+            start: 0,
+            end: 1,
+            mul: 0
+        },
+        model: {
+            fadein: {
+                ugen: "flock.ugen.line",
+                start: 0, 
+                end: 1, 
+                duration: 30
+            },
+            fadeout: {
+                ugen: "flock.ugen.line",
+                start: 1, 
+                end: 0, 
+                duration: 30
+            }
+        },
+        invokers: {
+            fadein: {
+                func: "{that}.set",
+                args: ["mysample.mul",  "{that}.model.fadein"]
+            },
+            fadeout: {
+                func: "{that}.set",
+                args: ["mysample.mul",  "{that}.model.fadeout"]
+            }
+        }
+    });
+
+    fluid.defaults("adam.bufferBand", {
+        gradeNames: "flock.band",
+        components: {
+            grandrone: {
+                type: "adam.bufferPlayingSynth",
+                options: {
+                    bufferUrl: "grandrone.wav"
+                }
+            },
+            freezer: {
+                type: "adam.bufferPlayingSynth",
+                options: {
+                    bufferUrl: "freezer.wav"
+                }
+            },
+            newdrone: {
+                type: "adam.bufferPlayingSynth", 
+                options: {
+                    bufferUrl: "newdrone.wav"
+                }
+            },
+            cymbal: {
+                type: "adam.bufferPlayingSynth", 
+                options: {
+                    bufferUrl: "cymballike.wav"
+                }
+            }
+        }
+    });
+
     // detect node.js environement
     if (typeof module !== 'undefined' && module.exports) {
         fluid.module.register("adam", __dirname, require);
