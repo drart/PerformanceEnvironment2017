@@ -27,14 +27,12 @@
         <div> https://github.com/colinbdclark/Flocking/issues/8#issuecomment-108712105  --  How to use envGen</div>
         <div> https://github.com/colinbdclark/Flocking/issues/128 -- changing ugens on the fly</div-->
 
-        <!--input type="checkbox" id="onoff" name="vehicle"> </input-->
-
         <hr>
 
-        <input type="checkbox" id="sf1" name="sf1">Cymbal Drone</input>
-        <input type="checkbox" id="sf2" name="sf2">Other Drone</input>
-        <input type="checkbox" id="sf3" name="sf3">Granular Bass </input>
-        <input type="checkbox" id="sf4" name="sf4">Freezer </input>
+        <input type="checkbox" id="sf1" name="sf1"><span id="sf1-label"></span>
+        <input type="checkbox" id="sf2" name="sf2"><span id="sf2-label"></span>
+        <input type="checkbox" id="sf3" name="sf3"><span id="sf3-label"></span>
+        <input type="checkbox" id="sf4" name="sf4"><span id="sf4-label"></span>
 
         <hr>
 
@@ -42,65 +40,55 @@
       
         <script src="midicontrollers.js"></script>
         <script src="adam.js"></script>
-
-        <div id="push">
-            Push 
-            <div id="push-noteon"></div>
-            <div id="push-noteoff"></div>
-            <div id="push-cc"></div>
-            <div id="push-aftertouch"></div>
-            <div id="push-pressure"></div>
-        </div>
-
-        <div id="ms20">
-            iMS-20
-            <div id="ms20-noteon"></div>
-            <div id="ms20-noteoff"></div>
-            <div id="ms20-cc"></div>
-            <div id="ms20-aftertouch"></div>
-            <div id="ms20-pressure"></div>
-        </div>
-
         <hr>
         <h2>OSC</h2>
 
         <div id="osctarget"></div>
 
-        <!--script src="gamepads.js"></script-->
-
         <script>
+            function october2017(){
+                document.getElementById('sf1-label').innerHTML = "Cymbal Drone";
+                document.getElementById('sf2-label').innerHTML = "Other Drone";
+                document.getElementById('sf3-label').innerHTML = "Granular Bass";
+                document.getElementById('sf4-label').innerHTML = "Freezer";
 
-        var drones = adam.bufferBand();
-        var cloosh = adam.cloosh();
+                document.getElementById('sf1').addEventListener('change', function(event){
+                    if (this.checked){
+                        drones.cymbal.fadein();
+                    }else{
+                        drones.cymbal.fadeout();
+                    }
+                });
+                document.getElementById('sf2').addEventListener('change', function(event){
+                    if (this.checked){
+                        drones.newdrone.fadein();
+                    }else{
+                        drones.newdrone.fadeout();
+                    }
+                });
+                document.getElementById('sf3').addEventListener('change', function(event){
+                    if (this.checked){
+                        drones.grandrone.fadein();
+                    }else{
+                        drones.grandrone.fadeout();
+                    }
+                });
+                document.getElementById('sf4').addEventListener('change', function(event){
+                    if (this.checked){
+                        drones.freezer.fadein();
+                    }else{
+                        drones.freezer.fadeout();
+                    }
+                });
 
-        document.getElementById('sf1').addEventListener('change', function(event){
-            if (this.checked){
-                drones.cymbal.fadein();
-            }else{
-                drones.cymbal.fadeout();
+                window.drones = adam.bufferBand();
+                window.cloosh = adam.cloosh();
+                window.octopus = adam.octopus();
             }
-        });
-        document.getElementById('sf2').addEventListener('change', function(event){
-            if (this.checked){
-                drones.newdrone.fadein();
-            }else{
-                drones.newdrone.fadeout();
-            }
-        });
-        document.getElementById('sf3').addEventListener('change', function(event){
-            if (this.checked){
-                drones.grandrone.fadein();
-            }else{
-                drones.grandrone.fadeout();
-            }
-        });
-        document.getElementById('sf4').addEventListener('change', function(event){
-            if (this.checked){
-                drones.freezer.fadein();
-            }else{
-                drones.freezer.fadeout();
-            }
-        });
+        </script>
+        <script>
+            october2017();
+            flock.enviro.shared.play();
         </script>
     </body>
 </html>

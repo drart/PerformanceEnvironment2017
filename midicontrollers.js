@@ -1,3 +1,5 @@
+
+/*
 fluid.defaults("adam.midi.controller", {
     gradeNames: "flock.midi.controller",
     openImmediately: true,
@@ -19,11 +21,9 @@ fluid.defaults("adam.midi.controller", {
         }
     },
     listeners: {
-        /*
         "{that}.connection.onReady": function(){
             console.log("fkljalfd");
         },
-        */
         "noteOn.log": function(msg){
             console.log(msg);
         },
@@ -48,29 +48,62 @@ adam.midi.controller.domlognoteon = function(id, msg){
     console.log(id);
     $("#"+id + "-noteon").text(fluid.prettyPrintJSON(msg));
 };
+*/
 
 /////////////////////////////////////////////
-fluid.defaults("adam.midi.quneo", {
-    gradeNames: "adam.midi.controller",
-    model: {
-        portname: "QUNEO",
-    },
-
+//  Controller Utilities
+/////////////////////////////////////////////
+fluid.defaults("adam.midi.console", {
+    listeners: {
+        "noteOn.log": function(msg){
+            console.log(msg);
+        },
+        "noteOff.log": function(msg){
+            console.log(msg);
+        },
+        "control.log": function(msg){
+            console.log(msg);
+        },
+        "aftertouch.log": function(msg){
+            console.log(msg)
+        },
+    }
 });
 
-
-fluid.defaults("adam.midi.quneo.october2017", {
-    gradeNames: "adam.midi.quneo",
-    invokers:{
-        removelogs: {
-            func: function(that){
-                that.removeListener("control.log");
-                that.removeListener("noteOn.log");
-                that.removeListener("noteOff.log");
-            },
-            args: ["{that}"]
+/////////////////////////////////////////////
+//  Controllers
+/////////////////////////////////////////////
+fluid.defaults("adam.midi.quneo", {
+    gradeNames: "flock.midi.connection", 
+    openImmediately: true,
+    ports: {
+        input: {
+            name : "QUNEO",
         }
-    },
+    }
+});
+
+fluid.defaults("adam.midi.boppad", {
+    gradeNames: "flock.midi.connection",
+    openImmediately: true,
+    ports: {
+        name: "BopPad"
+    }
+});
+
+fluid.defaults("adam.midi.bcr2000", {
+    gradeNames: "flock.midi.connection",
+    openImmediately: true,
+    ports: {
+        name: "BCF2000 Port 1"
+    }
+});
+  
+/////////////////////////////////////////////
+//  Controller Mappings
+/////////////////////////////////////////////
+fluid.defaults("adam.midi.quneo.october2017", {
+    gradeNames: ["adam.midi.quneo", "adam.midi.console"],
     listeners:{ 
         //"after:onCreate": "{that}.removelogs",
         noteOn: function (msg) {
@@ -134,59 +167,43 @@ fluid.defaults("adam.midi.quneo.october2017", {
 });
 
 
-
-
-fluid.defaults("adam.midi.quneo.october2017test", {
-    gradeNames: "adam.midi.quneo",
+fluid.defaults("adam.midi.bcr2000.october2017", {
+    gradeNames: ["adam.midi.bcr2000", "adam.midi.console"],
     listeners: {
-        noteOn: function(msg){
-            //console.log(msg);
-            //bop.set("bop.freq", Math.pow(2, (msg.note-69)/12) * 440 );
-            //bop.set("bop.mul.gate", 1);
-            //$("#quneo-noteon").text(fluid.prettyPrintJSON(msg));
-        },
-        noteOn: function (msg) {
-        },
-        noteOff: function (msg) {
-            //console.log(msg);
-            //bop.set("bop.mul.gate", 0);
-            //$("#quneo-noteoff").text(fluid.prettyPrintJSON(msg));
-        },
         control: function (msg) {
-            //console.log(msg);
-            //bop.set("bop.mul.gate", 0);
-            //$("#quneo-cc").text(fluid.prettyPrintJSON(msg));
-        },
-        //pitchbend: function(msg) {
-        //    //console.log(msg);
-        //},
-        //aftertouch: function(msg){
-            //console.log(msg);
-        //    $("#quneo-aftertouch").text(fluid.prettyPrintJSON(msg));
-        //}
+            if(msg.number ===81){
+                octopus.set("f1.mul", msg.value / 127);
+            }
+            if(msg.number ===82){
+                octopus.set("f2.mul", msg.value / 127);
+            }
+            if(msg.number ===83){
+                octopus.set("f3.mul", msg.value / 127);
+            }
+            if(msg.number ===84){
+                octopus.set("f4.mul", msg.value / 127);
+            }
+            if(msg.number ===85){
+                octopus.set("f5.mul", msg.value / 127);
+            }
+            if(msg.number === 89){
+                octopus.scatter();
+            }
+            if(msg.number === 90){
+                octopus.scatterratio(300,1.06,30);
+            }
+            if(msg.number === 91){
+                octopus.scatterratio(305,1.06* 1.06,30);
+            }
+            if(msg.number === 92){
+                octopus.scatterratio(299,1.04,30);
+            }
+        }
     }
 });
-
-
-fluid.defaults("adam.midi.boppad", {
-    gradeNames: "adam.midi.controller",
-    model: {
-        portname: "BopPad"
-    }
-});
-
-fluid.defaults("adam.midi.bcr2000", {
-    gradeNames: "adam.midi.controller",
-    model: {
-        portname: "BCF2000 Port 1"
-    }
-});
-
 
 var quneo = adam.midi.quneo.october2017();
-var boppad = adam.midi.boppad();
-var bcr2000 = adam.midi.bcr2000();
-
+var bcr2000 = adam.midi.bcr2000.october2017();
 
 
 /*
@@ -202,6 +219,10 @@ fluid.defaults("adam.midi.bcr2000", {
 });
 */
 
+
+///////////////////////////
+//  TODO: convert to fluid style
+///////////////////////////
 var abletonpush = flock.midi.connection({
     // This should only be used if you know the port you want to use
     // ahead of time. Otherwise, the system.ports object should be bound to a UI
@@ -306,154 +327,4 @@ var abletonNoteOns = function(msg){
 
 /* TODO
 - start by clearing them all
-*/
-
-/*
-var boppad = flock.midi.connection({
-    openImmediately: true,
-    ports: {
-        name : "BopPad"
-    },
-    listeners: {
-        noteOn: function (msg) {
-            //console.log(msg);
-            //bop.set("bop.mul.gate", 1);
-            $("#boppad-noteon").text(fluid.prettyPrintJSON(msg));
-        },
-        noteOff: function (msg) {
-            //console.log(msg);
-            //bop.set("bop.mul.gate", 0);
-            $("#boppad-noteoff").text(fluid.prettyPrintJSON(msg));
-        },
-        control: function (msg) {
-            //console.log(msg);
-            //bop.set("bop.mul.gate", 0);
-            $("#boppad-cc").text(fluid.prettyPrintJSON(msg));
-        },
-        pitchbend: function(msg) {
-            console.log(msg);
-        },
-        aftertouch: function(msg){
-            //console.log(msg);
-            $("#boppad-aftertouch").text(fluid.prettyPrintJSON(msg));
-        }
-    }
- 
-});
-
-var quneo = flock.midi.connection({
-    openImmediately: true,
-    ports: {
-        name : "QUNEO"
-    },
-    listeners: {
-        noteOn: function (msg) {
-            //console.log(msg);
-            //bop.set("bop.freq", Math.pow(2, (msg.note-69)/12) * 440 );
-            //bop.set("bop.mul.gate", 1);
-            $("#quneo-noteon").text(fluid.prettyPrintJSON(msg));
-        },
-        noteOff: function (msg) {
-            //console.log(msg);
-            //bop.set("bop.mul.gate", 0);
-            $("#quneo-noteoff").text(fluid.prettyPrintJSON(msg));
-        },
-        control: function (msg) {
-            //console.log(msg);
-            //bop.set("bop.mul.gate", 0);
-            $("#quneo-cc").text(fluid.prettyPrintJSON(msg));
-        },
-        pitchbend: function(msg) {
-            //console.log(msg);
-        },
-        aftertouch: function(msg){
-            //console.log(msg);
-            $("#quneo-aftertouch").text(fluid.prettyPrintJSON(msg));
-        }
-    }
-});
-var akai = flock.midi.connection({
-    openImmediately: true,
-    ports: {
-        name : "LPD8 MIDI 1"
-    },
-    listeners: {
-        noteOn: function (msg) {
-            //console.log(msg);
-            //bop.set("bop.freq", msg.note* 200);
-            //bop.set("bop.mul.gate", 1);
-            $("#akai-noteon").text(fluid.prettyPrintJSON(msg));
-        },
-        noteOff: function (msg) {
-            //console.log(msg);
-            //bop.set("bop.mul.gate", 0);
-            $("#akai-noteoff").text(fluid.prettyPrintJSON(msg));
-        },
-        control: function (msg) {
-            //console.log(msg.number);
-            //bop.set("bop.mul.gate", 0);
-            $("#akai-cc").text(fluid.prettyPrintJSON(msg));
-            //synths.set(Number( msg.number -1 ).toString() + '.mul', msg.value/ 127);
-        },
-        pitchbend: function(msg) {
-            console.log(msg);
-        },
-        aftertouch: function(msg){
-            $("#akai-aftertouch").text(fluid.prettyPrintJSON(msg));
-            //console.log(msg);
-        }
-    }
-});
-
-var bcr2000 = flock.midi.connection({
-    openImmediately: true,
-    ports: {
-        name : "BCF2000 Port 1"
-    },
-    listeners: {
-        noteOn: function (msg) {
-            $("#bcr2000-noteon").text(fluid.prettyPrintJSON(msg));
-        },
-        noteOff: function (msg) {
-            $("#bcr2000-noteoff").text(fluid.prettyPrintJSON(msg));
-        },
-        control: function (msg) {
-            $("#bcr2000-cc").text(fluid.prettyPrintJSON(msg));
-            if(msg.number ===81){
-                octopus.set("f1.mul", msg.value / 127);
-            }
-            if(msg.number ===82){
-                octopus.set("f2.mul", msg.value / 127);
-            }
-            if(msg.number ===83){
-                octopus.set("f3.mul", msg.value / 127);
-            }
-            if(msg.number ===84){
-                octopus.set("f4.mul", msg.value / 127);
-            }
-            if(msg.number ===85){
-                octopus.set("f5.mul", msg.value / 127);
-            }
-            if(msg.number === 89){
-                octopus.scatter();
-            }
-            if(msg.number === 90){
-                octopus.scatterratio(300,1.06,30);
-            }
-            if(msg.number === 91){
-                octopus.scatterratio(305,1.06* 1.06,30);
-            }
-            if(msg.number === 92){
-                octopus.scatterratio(299,1.04,30);
-            }
-        },
-        pitchbend: function(msg) {
-            console.log(msg);
-        },
-        aftertouch: function(msg){
-            $("#bcr2000-aftertouch").text(fluid.prettyPrintJSON(msg));
-        }
-    }
-});
-
 */
