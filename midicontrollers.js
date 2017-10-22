@@ -1,11 +1,12 @@
 fluid.defaults("adam.midi.controller", {
     gradeNames: "flock.midi.controller",
     openImmediately: true,
-    model: {
-        domElement: null
-    },
     ports: {
-        name : "{that}.model.portname",
+        name: "{that}.model.portname"
+    },
+    model: {
+        portname: null,
+        domElement: null
     },
     invokers: {
         create:{
@@ -28,7 +29,7 @@ fluid.defaults("adam.midi.controller", {
         },
         "noteOn.domlog" : "{that}.domlognoteon",
         "control.log": function(msg){
-            //console.log(msg);
+            console.log(msg);
         },
         "onCreate.log": "{that}.create",
     }
@@ -58,11 +59,20 @@ fluid.defaults("adam.midi.quneo", {
 });
 
 
-
 fluid.defaults("adam.midi.quneo.october2017", {
     gradeNames: "adam.midi.quneo",
+    invokers:{
+        removelogs: {
+            func: function(that){
+                that.removeListener("control.log");
+                that.removeListener("noteOn.log");
+                that.removeListener("noteOff.log");
+            },
+            args: ["{that}"]
+        }
+    },
     listeners:{ 
-
+        //"after:onCreate": "{that}.removelogs",
         noteOn: function (msg) {
             //$("#boppad-midi-display").text(fluid.prettyPrintJSON(msg));
             if (msg.note >= 68 && msg.note <= 83){
