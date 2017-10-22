@@ -70,6 +70,52 @@ fluid.defaults("adam.midi.console", {
     }
 });
 
+fluid.defaults("adam.midi.domlog", {
+    model:{
+        domElement: null
+    }, 
+    invokers: {
+        creator: {
+            funcName: "adam.midi.domlog.ready",
+            args: ["{that}"]
+        },
+        printor: {
+            func: function(that, msg){
+                if(msg.type === "noteOn"){
+                    $("#" + that.id + "-noteon").text(fluid.prettyPrintJSON(msg));
+                }
+                if(msg.type === "noteOff"){
+                    $("#" + that.id + "-noteoff").text(fluid.prettyPrintJSON(msg));
+                }
+                if(msg.type === "control"){
+                    $("#" + that.id + "-cc").text(fluid.prettyPrintJSON(msg));
+                }
+            },
+            args: ["{that}", "{arguments}.0"]
+        }
+    },
+    listeners: {
+        "noteOn.domlog": "{that}.printor",
+        "noteOff.domlog": "{that}.printor",
+        "control.domlog": "{that}.printor",
+        "onReady.preapredom": "{that}.creator",
+    }
+});
+
+adam.midi.domlog.ready = function(that){
+    that.options.domElement = $("<div/>");
+    that.options.domElement.text( that.options.model.portname );
+    that.options.domElement.appendTo("#midi-display");
+    $("<div/>").attr("id", that.id+"-label").text(that.options.ports.input.name).appendTo(that.options.domElement);
+    $("<div/>").attr("id", that.id+"-noteon").appendTo(that.options.domElement);
+    $("<div/>").attr("id", that.id+"-noteoff").appendTo(that.options.domElement);
+    $("<div/>").attr("id", that.id+"-cc").appendTo(that.options.domElement);
+};
+/*
+adam.midi.domlog.print = function(path,msg){
+    $("#" + path).text(fluid.prettyPrintJSON(msg));
+}
+*/
 /////////////////////////////////////////////
 //  Controllers
 /////////////////////////////////////////////
@@ -87,7 +133,9 @@ fluid.defaults("adam.midi.boppad", {
     gradeNames: "flock.midi.connection",
     openImmediately: true,
     ports: {
-        name: "BopPad"
+        input: {
+            name: "BopPad"
+        }
     }
 });
 
@@ -95,7 +143,9 @@ fluid.defaults("adam.midi.bcr2000", {
     gradeNames: "flock.midi.connection",
     openImmediately: true,
     ports: {
-        name: "BCF2000 Port 1"
+        input: {
+            name: "BCF2000 Port 1"
+        }
     }
 });
   
@@ -103,7 +153,8 @@ fluid.defaults("adam.midi.bcr2000", {
 //  Controller Mappings
 /////////////////////////////////////////////
 fluid.defaults("adam.midi.quneo.october2017", {
-    gradeNames: ["adam.midi.quneo", "adam.midi.console"],
+    //gradeNames: ["adam.midi.quneo", "adam.midi.console", "adam.midi.domlog"],
+    gradeNames: ["adam.midi.quneo", "adam.midi.domlog"],
     listeners:{ 
         //"after:onCreate": "{that}.removelogs",
         noteOn: function (msg) {
@@ -168,7 +219,7 @@ fluid.defaults("adam.midi.quneo.october2017", {
 
 
 fluid.defaults("adam.midi.bcr2000.october2017", {
-    gradeNames: ["adam.midi.bcr2000", "adam.midi.console"],
+    gradeNames: ["adam.midi.bcr2000", "adam.midi.domlog"],
     listeners: {
         control: function (msg) {
             if(msg.number ===81){
