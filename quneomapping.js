@@ -1,16 +1,11 @@
 flock.init({
-            bufferSize : 256 
-        });
+    bufferSize : 256 
+});
 
         var cloosh = adam.cloosh();
         cloosh.play();
 
-        var octopus = adam.octopus();
-        octopus.play()
 
-        var t  = 10;
-        var r = 1.01;
-        var v = 300;
 
         quneo = flock.midi.connection({
             openImmediately: true,

@@ -1,3 +1,88 @@
+fluid.defaults("adam.midi.controller", {
+    gradeNames: "flock.midi.controller",
+    openImmediately: true,
+    ports: {
+        name : "{that}.model.portname",
+    },
+    listeners: {
+        "noteOn.log": function(msg){
+            console.log(msg);
+        },
+        "control.log": function(msg){
+            console.log(msg);
+        },
+        onCreate: function(){
+            console.log("{that}.model.portname" );
+        }
+    }
+});
+
+fluid.defaults("adam.midi.quneo", {
+    gradeNames: "adam.midi.controller",
+    model: {
+        portname: "QUNEO",
+    },
+    listeners: {
+        noteOn: function (msg) {
+            //console.log(msg);
+            //bop.set("bop.freq", Math.pow(2, (msg.note-69)/12) * 440 );
+            //bop.set("bop.mul.gate", 1);
+            $("#quneo-noteon").text(fluid.prettyPrintJSON(msg));
+        },
+        noteOff: function (msg) {
+            //console.log(msg);
+            //bop.set("bop.mul.gate", 0);
+            $("#quneo-noteoff").text(fluid.prettyPrintJSON(msg));
+        },
+        control: function (msg) {
+            //console.log(msg);
+            //bop.set("bop.mul.gate", 0);
+            $("#quneo-cc").text(fluid.prettyPrintJSON(msg));
+        },
+        //pitchbend: function(msg) {
+        //    //console.log(msg);
+        //},
+        //aftertouch: function(msg){
+            //console.log(msg);
+        //    $("#quneo-aftertouch").text(fluid.prettyPrintJSON(msg));
+        //}
+    }
+});
+
+fluid.defaults("adam.midi.boppad", {
+    gradeNames: "adam.midi.controller",
+    model: {
+        portname: "BopPad"
+    }
+});
+
+fluid.defaults("adam.midi.bcr2000", {
+    gradeNames: "adam.midi.controller",
+    model: {
+        portname: "BCF2000 Port 1"
+    }
+});
+
+
+var quneo = adam.midi.quneo();
+var boppad = adam.midi.boppad();
+var bcr2000 = adam.midi.bcr2000();
+
+
+
+/*
+ * // the future!!!
+fluid.defaults("adam.midi.bcr2000", {
+    gradeNames: "flock.midi.connection",
+    listeners: {
+        "noteOn.domoreimportantthing": "{synth}.set(awesome.ugen, 440)",
+        "noteOn.logNoteValue" : {
+            priority: "after:domoreimportantthing",
+        }
+    }
+});
+*/
+
 var abletonpush = flock.midi.connection({
     // This should only be used if you know the port you want to use
     // ahead of time. Otherwise, the system.ports object should be bound to a UI
@@ -104,6 +189,7 @@ var abletonNoteOns = function(msg){
 - start by clearing them all
 */
 
+/*
 var boppad = flock.midi.connection({
     openImmediately: true,
     ports: {
@@ -167,7 +253,6 @@ var quneo = flock.midi.connection({
         }
     }
 });
-
 var akai = flock.midi.connection({
     openImmediately: true,
     ports: {
@@ -252,20 +337,4 @@ var bcr2000 = flock.midi.connection({
     }
 });
 
-
-/*
- * // the future!!!
-fluid.defaults("adam.midi.bcr2000", {
-    gradeNames: "flock.midi.connection",
-
-    listeners: {
-        "noteOn.domoreimportantthing": "{synth}.set(awesome.ugen, 440)",
-
-        "noteOn.logNoteValue" : {
-            priority: "after:domoreimportantthing",
-            
-            
-        }
-    }
-});
 */
