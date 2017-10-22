@@ -1,43 +1,151 @@
 fluid.defaults("adam.midi.controller", {
     gradeNames: "flock.midi.controller",
     openImmediately: true,
+    model: {
+        domElement: null
+    },
     ports: {
         name : "{that}.model.portname",
     },
+    invokers: {
+        create:{
+            funcName: "adam.midi.controller.create",
+            args: ["{that}"]
+        },
+        domlognoteon:{
+            funcName: "adam.midi.controller.domlognoteon",
+            args: ["{that}.id", "{arguments}.0"]
+        }
+    },
     listeners: {
+        /*
+        "{that}.connection.onReady": function(){
+            console.log("fkljalfd");
+        },
+        */
         "noteOn.log": function(msg){
             console.log(msg);
         },
+        "noteOn.domlog" : "{that}.domlognoteon",
         "control.log": function(msg){
-            console.log(msg);
+            //console.log(msg);
         },
-        onCreate: function(){
-            console.log("{that}.model.portname" );
-        }
+        "onCreate.log": "{that}.create",
     }
 });
 
+adam.midi.controller.create = function(that){
+    that.options.domElement = $("<div/>");
+    that.options.domElement.text( that.options.model.portname );
+    that.options.domElement.appendTo("body");
+    $("<div/>").attr("id", that.id+"-noteon").appendTo(that.options.domElement);
+    $("<div/>").attr("id", that.id+"-noteoff").appendTo(that.options.domElement);
+    $("<div/>").attr("id", that.id+"-cc").appendTo(that.options.domElement);
+};
+
+adam.midi.controller.domlognoteon = function(id, msg){
+    console.log(id);
+    $("#"+id + "-noteon").text(fluid.prettyPrintJSON(msg));
+};
+
+/////////////////////////////////////////////
 fluid.defaults("adam.midi.quneo", {
     gradeNames: "adam.midi.controller",
     model: {
         portname: "QUNEO",
     },
-    listeners: {
+
+});
+
+
+
+fluid.defaults("adam.midi.quneo.october2017", {
+    gradeNames: "adam.midi.quneo",
+    listeners:{ 
+
         noteOn: function (msg) {
+            //$("#boppad-midi-display").text(fluid.prettyPrintJSON(msg));
+            if (msg.note >= 68 && msg.note <= 83){
+                var myval = (83 - msg.note)/ (83 - 68); 
+                cloosh.set("env.gate", 1);
+                cloosh.set("boop.freq", msg.note * 40);
+                cloosh.set("freeverb.room", myval);
+                cloosh.set("freeverb.damp", 1 - myval);
+                //cloosh.set("freeverb.mix", Math.sin(myval));
+                cloosh.set("freeverb.width", Math.sin(myval));
+            }
+            /*
+            if(msg.note === 25){
+                octopus.scatter();
+            }
+            if(msg.note === 26){
+                octopus.scatterratio(v,r,t);
+            }
+            */
+        },
+        noteOff: function (msg) {
+            //$("#boppad-midi-display").text(fluid.prettyPrintJSON(msg));
+            cloosh.set("env.gate", 0);
+        },
+        control: function (msg) {
+            //$("#boppad-midi-display").text(fluid.prettyPrintJSON(msg));
+            if(msg.number === 10){
+                cloosh.set("freeverb.mix", msg.value/127 );
+            }
+            /*
+            if(msg.number === 6){
+                octopus.set("f1.mul", msg.value/ 127);
+                octopus.set("f5.mul", msg.value/ 127);
+            }
+            if(msg.number === 7){
+                octopus.set("f2.mul", msg.value/ 127);
+                octopus.set("f6.mul", msg.value/ 127);
+            }
+            if(msg.number === 8){
+                octopus.set("f3.mul", msg.value/ 127);
+                octopus.set("f7.mul", msg.value/ 127);
+            }
+            if(msg.number === 9){
+                octopus.set("f4.mul", msg.value/ 127);
+                octopus.set("f8.mul", msg.value/ 127);
+            }
+            if(msg.number === 0){
+                t = msg.value / 4;
+            }
+            if(msg.number === 1){
+                v = msg.value * 4 + 1;
+            }
+            if(msg.number === 2){
+                r = msg.value / 127 + 1;
+            }
+            */
+        }
+    }
+});
+
+
+
+
+fluid.defaults("adam.midi.quneo.october2017test", {
+    gradeNames: "adam.midi.quneo",
+    listeners: {
+        noteOn: function(msg){
             //console.log(msg);
             //bop.set("bop.freq", Math.pow(2, (msg.note-69)/12) * 440 );
             //bop.set("bop.mul.gate", 1);
-            $("#quneo-noteon").text(fluid.prettyPrintJSON(msg));
+            //$("#quneo-noteon").text(fluid.prettyPrintJSON(msg));
+        },
+        noteOn: function (msg) {
         },
         noteOff: function (msg) {
             //console.log(msg);
             //bop.set("bop.mul.gate", 0);
-            $("#quneo-noteoff").text(fluid.prettyPrintJSON(msg));
+            //$("#quneo-noteoff").text(fluid.prettyPrintJSON(msg));
         },
         control: function (msg) {
             //console.log(msg);
             //bop.set("bop.mul.gate", 0);
-            $("#quneo-cc").text(fluid.prettyPrintJSON(msg));
+            //$("#quneo-cc").text(fluid.prettyPrintJSON(msg));
         },
         //pitchbend: function(msg) {
         //    //console.log(msg);
@@ -48,6 +156,7 @@ fluid.defaults("adam.midi.quneo", {
         //}
     }
 });
+
 
 fluid.defaults("adam.midi.boppad", {
     gradeNames: "adam.midi.controller",
@@ -64,7 +173,7 @@ fluid.defaults("adam.midi.bcr2000", {
 });
 
 
-var quneo = adam.midi.quneo();
+var quneo = adam.midi.quneo.october2017();
 var boppad = adam.midi.boppad();
 var bcr2000 = adam.midi.bcr2000();
 

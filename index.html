@@ -40,23 +40,8 @@
 
         <h2>MIDI</h2>
       
-        <div id="boppad">
-            Boppad
-            <div id="boppad-noteon"></div>
-            <div id="boppad-noteoff"></div>
-            <div id="boppad-cc"></div>
-            <div id="boppad-aftertouch"></div>
-            <div id="boppad-pressure"></div>
-        </div>
-
-        <div id="quneo">
-            Quneo
-            <div id="quneo-noteon"></div>
-            <div id="quneo-noteoff"></div>
-            <div id="quneo-cc"></div>
-            <div id="quneo-aftertouch"></div>
-            <div id="quneo-pressure"></div>
-        </div>
+        <script src="midicontrollers.js"></script>
+        <script src="adam.js"></script>
 
         <div id="push">
             Push 
@@ -76,29 +61,17 @@
             <div id="ms20-pressure"></div>
         </div>
 
-        <div id="bcr2000">
-            BCR-2000
-            <div id="bcr2000-noteon"></div>
-            <div id="bcr2000-noteoff"></div>
-            <div id="bcr2000-cc"></div>
-            <div id="bcr2000-aftertouch"></div>
-            <div id="bcr2000-pressure"></div>
-        </div>
-
         <hr>
         <h2>OSC</h2>
 
         <div id="osctarget"></div>
+
         <!--script src="gamepads.js"></script-->
-
-        <script src="midicontrollers.js"></script>
-        <script src="adam.js"></script>
-
-        <!--script src="quneomapping.js"></script-->
 
         <script>
 
         var drones = adam.bufferBand();
+        var cloosh = adam.cloosh();
 
         document.getElementById('sf1').addEventListener('change', function(event){
             if (this.checked){
