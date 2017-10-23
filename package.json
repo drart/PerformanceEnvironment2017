@@ -3,11 +3,15 @@
   "author": "Adam Tindale",
   "version": "0.0.1",
   "dependencies": {
-    "flocking": "colinbdclark/flocking", 
-    "nexusui": "1.2.0",
-    "myo": "3.0.0", 
+    "express": "^4.16.2",
+    "flocking": "github:colinbdclark/flocking",
+    "ip": "^1.1.5",
+    "myo": "3.0.0",
     "nan": "^2.6.2",
-    "osc": "2.2.0"
+    "nexusui": "1.2.0",
+    "osc": "2.2.0",
+    "p5": "^0.5.16",
+    "pressure": "^2.1.1"
   },
   "repository": {
     "type:": "git",

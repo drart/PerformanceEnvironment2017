@@ -12,6 +12,7 @@ app.listen(8000);
 var wss = new WebSocket.Server({ port: 9000 });
 
 wss.on("connection", function (socket) {
+    console.log("A Web Socket connection has been established!");
     var socketPort = new osc.WebSocketPort({
         socket: socket,
         metadata: true
@@ -20,16 +21,32 @@ wss.on("connection", function (socket) {
     // work on this
     socketPort.on("message", function (oscMsg) {
         console.log(oscMsg);
-        if (oscMsg.address === "/pressurexy"){
-            console.log(typeof oscMsg.args[0].value);
-            s.set("tester.freq.freq", oscMsg.args[0].value + 1 );
-            s.set("tester.freq.mul", oscMsg.args[1].value + 1);
-            s.set("tester.freq.add", oscMsg.args[2].value + 1);
-        }
     });
+
+    
+    var relay = new osc.Relay(udp, socketPort, {
+        raw: true
+    });
+
 });
 
+var udp = new osc.UDPPort({
+    localAddress: "0.0.0.0",
+    localPort: 9000,
+    remoteAddress: "127.0.0.1",
+    remotePort: 8000 
+});
 
+udp.on("ready", function () {
+    //var ipAddresses = getIPAddresses();
+    console.log("Listening for OSC over UDP on port: " + udp.options.remotePort);
+    //ipAddresses.forEach(function (address) {
+    //    console.log(" Host:", address + ", Port:", udp.options.localPort);
+    //});
+    console.log("Broadcasting OSC over UDP to", udp.options.remoteAddress + ", Port:", udp.options.remotePort);
+});
+
+udp.open();
 
 
 
