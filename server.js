@@ -1,5 +1,13 @@
 var osc = require('osc');
 var WebSocket = require('ws');
+var express = require('express');
+
+var app = express();
+
+app.use( "/", express.static(__dirname) );
+app.listen(8000);
+
+
 
 var wss = new WebSocket.Server({ port: 9000 });
 
@@ -20,6 +28,15 @@ wss.on("connection", function (socket) {
         }
     });
 });
+
+
+
+
+
+
+
+
+/*
 
 var flock = require("flocking");
 

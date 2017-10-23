@@ -583,6 +583,8 @@
             }
         }
     });
+    
+    adam.glitchseq.tttttt = "fkjlkajdf";
 
     // detect node.js environement
     if (typeof module !== 'undefined' && module.exports) {
