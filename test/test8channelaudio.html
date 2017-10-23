@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<head>
+    <title>Multichanneltest</title>
+</head>
+<body>
+    <div id="flockchans"></div>
+    <script src="../node_modules/flocking/dist/flocking-all.js"></script>
+    <script>
+
+        /*
+        flock.init({
+            numBusses: 64,
+            chans: 16 
+        });
+        */
+
+        flock.init({
+            chans: 8
+        });
+
+        var synth = flock.synth({
+            synthDef: [
+                {
+                    ugen: "flock.ugen.sinOsc",
+                    freq: 300
+                },
+                {
+                    ugen: "flock.ugen.sinOsc",
+                    freq: 300
+                },       
+                        {
+                    ugen: "flock.ugen.sinOsc",
+                    freq: 300
+                },
+                        {
+                    ugen: "flock.ugen.sinOsc",
+                    freq: 300
+                },
+                        {
+                    ugen: "flock.ugen.sinOsc",
+                    freq: 300
+                },
+                        {
+                    ugen: "flock.ugen.sinOsc",
+                    freq: 300
+                },
+                        {
+                    ugen: "flock.ugen.sinOsc",
+                    freq: 300
+                },
+                        {
+                    ugen: "flock.ugen.sinOsc",
+                    freq: 300
+                }
+            ]
+        });
+
+        flock.enviro.shared.play();
+
+        document.getElementById("flockchans").innerHTML = flock.enviro.shared.audioSystem.model.chans;
+    </script>
+</body>
+</html>
