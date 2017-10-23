@@ -5,7 +5,7 @@
     // Simple Sine Synth
     //////
     fluid.defaults("adam.bop", {
-        gradeNames: ["flock.synth", "autoInit"],
+        gradeNames: "flock.synth", 
         synthDef: {
             id: "bop",
             ugen: "flock.ugen.sinOsc",
@@ -21,7 +21,7 @@
     });
 
     fluid.defaults("adam.tick", {
-        gradeNames: ["flock.synth", "autoInit"],
+        gradeNames: "flock.synth", 
         synthDef: {
             id : "tick",
             ugen: "flock.ugen.filter.moog", 
@@ -42,7 +42,7 @@
     });
 
     fluid.defaults("adam.windy", {
-        gradeNames: ["flock.synth", "autoInit"],
+        gradeNames: "flock.synth", 
         synthDef:{
             id: "moogy",
             ugen: "flock.ugen.filter.moog",
@@ -73,7 +73,7 @@
     });
 
     fluid.defaults("adam.amfm", {
-        gradeNames: ["flock.synth", "autoInit"],
+        gradeNames: "flock.synth", 
                 synthDef: {
                     id: "granny",
                     ugen: "flock.ugen.sinOsc",
@@ -92,7 +92,7 @@
     });
 
     fluid.defaults("adam.dusty", {
-        gradeNames: ["flock.synth", "autoInit"],
+        gradeNames: "flock.synth", 
         synthDef: {
             ugen: "flock.ugen.dust",
             density: {
@@ -106,7 +106,7 @@
     });
 
     fluid.defaults("adam.cloosh", {
-        gradeNames: ["flock.synth", "autoInit"],
+        gradeNames: "flock.band", 
         synthDef: {
             id: "freeverb",
             ugen: "flock.ugen.freeverb",
@@ -127,9 +127,9 @@
             }
         }  
     });
-    
+
     fluid.defaults("adam.octopus", {
-        gradeNames: ["flock.synth", "autoInit"],
+        gradeNames: "flock.synth", 
         invokers: {
             scatter: {
                 funcName: "adam.octopus.scatterfreqs", 
@@ -228,7 +228,7 @@
 
     // from hexapod
     fluid.defaults("adam.stereoclick", {
-        gradeNames: ["flock.synth", "autoInit"], 
+        gradeNames: "flock.synth", 
         invokers: {
             split: {
                 funcName: "adam.stereoclick.split", 
@@ -294,6 +294,7 @@
     }
     
     // new overriding     
+    /*
     fluid.defaults("adam.superstereoclick", {
         gradeNames: ['adam.stereoclick'] ,
         invokers : {
@@ -302,9 +303,10 @@
              }
         }
     });
+    */
 
     fluid.defaults("adam.bass.randomstereo", {
-        gradeNames: ["flock.synth", "autoInit"], 
+        gradeNames: "flock.synth", 
             synthDef: [{
                 ugen: "flock.ugen.square",
                 id: "tester",
@@ -353,7 +355,7 @@
     });
 
     fluid.defaults("adam.lowgranny", {
-    gradeNames: ["flock.synth", "autoInit"], 
+    gradeNames: "flock.synth", 
        synthDef: {
            ugen: "flock.ugen.granulator",
            numGrains: {
@@ -401,7 +403,7 @@
     });
 
     fluid.defaults("adam.bass.stereodistortionphasing", {
-        gradeNames: ["flock.synth", "autoInit"],
+        gradeNames: "flock.synth", 
         synthDef: [{
                 ugen: "flock.ugen.distortion.deJonge",
                 amount: {
@@ -509,6 +511,79 @@
         }
     });
 
+    fluid.defaults("adam.noiser", {
+        gradeNames: "flock.synth", 
+        synthDef: {
+            id: "noiser",
+            ugen: "flock.ugen.whiteNoise",    
+            mul: 0.05,
+            options: {
+                numOutputs: 1,
+                bus: 1
+            }
+        }
+    });
+
+
+    var glitches = [];
+    var glitchticks = 0;
+
+    fluid.defaults("adam.glitchseq", {
+        gradeNames: "flock.synth", 
+        model: {
+            glitchticks: 0,
+            glitches: []
+        },
+        synthDef: {
+            ugen: "flock.ugen.triggerCallback",
+            trigger: {
+                id: "pulse",
+                ugen: "flock.ugen.impulse",
+                freq: 4
+            },
+            options: {
+                callback: {
+                    func: function(){
+                        if (glitches[glitchticks % glitches.length].prob > Math.random()){
+                            glitches[glitchticks % glitches.length].set("trig.source", 1);
+                        }
+                        glitchticks++;
+                    }
+                }
+            }
+        },
+        listeners: {
+                "onCreate.setup": "{that}.setup"
+        },
+        invokers:{
+            scatter: function(){
+                glitches.sort(function(){return .5 - Math.random()});
+            },
+            randProb: function(){
+                for( var i = 0; i < glitches.length; i++){
+                    glitches[i].prob = Math.random();
+                }
+            },
+            setup: function(){
+                for(var i = 1; i < 9; i++){
+                    glitches.push( flock.synth({
+                        synthDef:{
+                            ugen: "flock.ugen.playBuffer",
+                            buffer: {
+                                url: "glitchseq/beat" + i + ".wav"
+                            },
+                            trigger: {
+                                id: "trig",
+                                ugen: "flock.ugen.valueChangeTrigger"
+                            }
+                        }
+                    }));
+                    glitches[i-1].prob = 1;
+                }
+            }
+        }
+    });
+
     // detect node.js environement
     if (typeof module !== 'undefined' && module.exports) {
         fluid.module.register("adam", __dirname, require);
@@ -542,43 +617,12 @@ var synths = flock.synth({
 
 */
 
-/*
-/// put this on its own channel
-var noiser = flock.synth({
-    synthDef: {
-        id: "noiser",
-        ugen: "flock.ugen.whiteNoise",    
-        mul: 0.05,
-        options: {
-            numOutputs: 1 
-        }
-              
-    }
-});
-*/
-
-
-
 //////////
 //BUFFERS
 //////////
 
 
 /*
-var thing1 = flock.synth({
-    synthDef: {
-        ugen: "flock.ugen.playBuffer",
-        buffer: {
-            id: "thing1",
-            url: "beat1.wav"
-        }, 
-        trigger :{
-            ugen: "flock.ugen.impulse",
-            freq: 1
-        }
-    }
-});
-
 var buffer;
 flock.audio.decode({
     src: "beat1.wav",

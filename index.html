@@ -48,6 +48,7 @@
 
         <script>
             function october2017(){
+
                 document.getElementById('sf1-label').innerHTML = "Cymbal Drone";
                 document.getElementById('sf2-label').innerHTML = "Other Drone";
                 document.getElementById('sf3-label').innerHTML = "Granular Bass";
@@ -85,12 +86,23 @@
                 window.drones = adam.bufferBand();
                 window.cloosh = adam.cloosh();
                 window.octopus = adam.octopus();
+                window.quneo = adam.midi.quneo.october2017();
+                window.bcr2000 = adam.midi.bcr2000.october2017();
             }
         </script>
         <script>
-            october2017();
+            function november2017(){
+                window.cloosh = adam.cloosh();
+                window.clish= adam.cloosh();
+                window.octopus = adam.octopus();
+                window.quneo = adam.midi.quneo.october2017();
+                window.push= adam.midi.push.november2017();
+            }
+        </script>
+        <script>
+            //october2017();
+            november2017();
             flock.enviro.shared.play();
         </script>
     </body>
 </html>
-
