@@ -7,12 +7,11 @@ var app = express();
 app.use( "/", express.static(__dirname) );
 app.listen(8000);
 
-
-
 var wss = new WebSocket.Server({ port: 9000 });
 
+var wsclients = [];
+
 wss.on("connection", function (socket) {
-    console.log("A Web Socket connection has been established!");
     var socketPort = new osc.WebSocketPort({
         socket: socket,
         metadata: true
@@ -24,10 +23,19 @@ wss.on("connection", function (socket) {
     });
 
     
-    var relay = new osc.Relay(udp, socketPort, {
+    var udprelay = new osc.Relay(udp, socketPort, {
         raw: true
     });
 
+    if (wsclients.length > 0){
+        var wsrelay = new osc.Relay(wsclients[0], socketPort, {
+            raw: true
+        });
+        console.log(wsclients[0]);
+    } 
+
+    console.log("A Web Socket connection has been established!");
+    wsclients.push(socketPort);
 });
 
 var udp = new osc.UDPPort({

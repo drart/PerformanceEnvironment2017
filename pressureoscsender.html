@@ -13,8 +13,11 @@
         <div id="mousex"></div>
         <div id="mousey"></div>
         <script>
+            var iptarget = prompt("Put in an IP target");
+            iptarget = (iptarget === null)? "localhost": iptarget;
+
             var oscPort = new osc.WebSocketPort({
-                url: "ws://localhost:9000", // URL to your Web Socket server.
+                url: "ws://" + iptarget + ":9000", // URL to your Web Socket server.
                 metadata: true
             });
             oscPort.open();

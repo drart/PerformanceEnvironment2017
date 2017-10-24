@@ -20,6 +20,7 @@
             oscPort.open();
             oscPort.on("message", function(msg){
                 console.log(msg); 
+                $("#osctarget").text(fluid.prettyPrintJSON(msg));
             });
         </script>
 
