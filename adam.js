@@ -549,13 +549,13 @@
     });
 
 
-    var glitches = [];
-    var glitchticks = 0;
-
+    //var glitches = [];
+    //var glitchticks = 0;
+    /////// NOT WORKING
     fluid.defaults("adam.glitchseq", {
         gradeNames: "flock.synth", 
         model: {
-            glitchticks: 0,
+            beat: 0,
             glitches: []
         },
         synthDef: {
@@ -567,30 +567,36 @@
             },
             options: {
                 callback: {
-                    func: function(){
-                        if (glitches[glitchticks % glitches.length].prob > Math.random()){
-                            glitches[glitchticks % glitches.length].set("trig.source", 1);
+                    func: function(that){
+                        if (that.model.glitches[that.model.beat].prob > Math.random()){
+                            glitches[that.model.beat].set("trig.source", 1);
                         }
-                        glitchticks++;
-                    }
+                        console.log(that);
+                        that.model.beat++;
+                        that.model.beat = that.model.beat % that.model.glitches.length;
+                    },
+                    args:"{that}"
                 }
             }
         },
         listeners: {
-                "onCreate.setup": "{that}.setup"
+                "onCreate.setup": {
+                    func: "{that}.setup",
+                    args: ["{that}"]
+                }
         },
         invokers:{
-            scatter: function(){
-                glitches.sort(function(){return .5 - Math.random()});
+            scatter: function(that){
+                that.model.glitches.sort(function(){return .5 - Math.random()});
             },
-            randProb: function(){
+            randProb: function(that){
                 for( var i = 0; i < glitches.length; i++){
-                    glitches[i].prob = Math.random();
+                    that.model.glitches[i].prob = Math.random();
                 }
             },
-            setup: function(){
+            setup: function(that){
                 for(var i = 1; i < 9; i++){
-                    glitches.push( flock.synth({
+                    that.model.glitches.push( flock.synth({
                         synthDef:{
                             ugen: "flock.ugen.playBuffer",
                             buffer: {
@@ -602,13 +608,156 @@
                             }
                         }
                     }));
-                    glitches[i-1].prob = 1;
+                    that.model.glitches[i-1].prob = 1;
                 }
             }
         }
     });
-    
-    adam.glitchseq.tttttt = "fkjlkajdf";
+
+    fluid.defaults("adam.windingwaves", {
+        gradeNames: "flock.synth",
+        synthDef: [{
+        ugen: "flock.ugen.sinOsc",
+        freq: {
+            ugen: "flock.ugen.lfNoise",
+                add: 310,
+                mul: {
+                    ugen: "flock.ugen.sin",
+                    add: 200,
+                    mul: 100,
+                    freq: 0.1
+                }
+            },
+            mul: 0.25
+        },
+        {
+            ugen: "flock.ugen.sinOsc",
+            freq: {
+                ugen: "flock.ugen.lfNoise",
+                add: 340,
+                mul: {
+                    ugen: "flock.ugen.sin",
+                    add: 200,
+                    mul: 130,
+                    freq: 0.2
+                }
+            },
+            mul: 0.25
+        }]      
+    });
+
+
+
+    fluid.defaults("adam.alternatingwaves", {
+        gradeNames: "flock.synth",
+            synthDef: {
+            ugen: "flock.ugen.sum",
+            sources: [
+            {
+                ugen: "flock.ugen.distortion.tanh",
+                source: {
+                    ugen: "flock.ugen.sinOsc", 
+                    freq: 500,
+                    mul: {
+                        ugen: "flock.ugen.asr",
+                        attack: 0.1,
+                        sustain: 0.1,
+                        release: 0.1,
+                        mul: 2,
+                        gate: {
+                            ugen: "flock.ugen.impulse",
+                            rate: "control",
+                            freq: 0.7,
+                            phase: 0
+                        
+                        }
+                    }
+                } 
+            }, 
+            {
+                ugen: "flock.ugen.sinOsc", 
+                freq: 600,
+                mul: {
+                    ugen: "flock.ugen.asr",
+                    attack: 0.1,
+                    sustain: 0.1,
+                    release: 0.1,
+                    mul: 2,
+                    gate: {
+                        ugen: "flock.ugen.impulse",
+                        rate: "control",
+                        freq: 0.7,
+                        phase: 0.5
+                    }
+                }
+            }] 
+        }
+    });    
+
+    // not working?
+    fluid.defaults("adam.bandednoise", {
+        gradeNames: "flock.synth",
+        model: {
+            noiz: []
+        },
+        synthDef: {
+            ugen: "flock.ugen.sum",
+            sources: "{that}.model.noiz"
+        },
+        invokers:{
+            setup: function(that){
+                for (var i = 0; i < 10; i++){
+                    var ugenDef = {
+                        ugen: "flock.ugen.filter.biquad.bp",
+                        freq: (100 * i) + 300,
+                        q: 1,
+                        source: {
+                            ugen: "flock.ugen.whiteNoise"
+                        }
+                    };
+                    that.model.noiz.push(ugenDef)
+                }
+            }
+        },
+        listeners: {
+            "onCreate.setup" : {
+                funcName: "{that}.setup",
+                args: "{that}"
+            }
+        }
+    });
+
+    fluid.defaults("adam.triglidepan", {
+        gradeNames: "flock.synth",
+        synthDef : {
+            id: "gibble",
+            ugen: "flock.ugen.pan2",
+            pan : {
+                ugen: "flock.ugen.sin",
+                freq: {
+                    ugen: "flock.ugen.sin",
+                    freq: 0.1,
+                    add: 2,
+                    mul: {
+                        ugen:"flock.ugen.line",
+                        start: 0,
+                        end: 1.9,
+                        duration: 60              
+                    }
+                }
+            }, 
+            source : {
+                ugen: "flock.ugen.triOsc",
+                freq: {
+                    ugen: "flock.ugen.line",
+                    start: 60,
+                    end: 100, 
+                    duration: 60
+                },
+                mul: 0.25
+            }
+        }
+    });
 
     // detect node.js environement
     if (typeof module !== 'undefined' && module.exports) {
