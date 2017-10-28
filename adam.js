@@ -569,47 +569,52 @@
                 callback: {
                     func: function(that){
                         if (that.model.glitches[that.model.beat].prob > Math.random()){
-                            glitches[that.model.beat].set("trig.source", 1);
+                            that.model.glitches[that.model.beat].set("trig.source", 1);
                         }
-                        console.log(that);
                         that.model.beat++;
                         that.model.beat = that.model.beat % that.model.glitches.length;
                     },
-                    args:"{that}"
+                    args: ["{that}"]
                 }
             }
         },
         listeners: {
-                "onCreate.setup": {
-                    func: "{that}.setup",
-                    args: ["{that}"]
-                }
+                "onCreate.setup": "{that}.setup"
         },
         invokers:{
-            scatter: function(that){
-                that.model.glitches.sort(function(){return .5 - Math.random()});
+            scatter: {
+                func: function(that){
+                    that.model.glitches.sort(function(){return .5 - Math.random()});
+                },
+                args: ["{that}"]
             },
-            randProb: function(that){
-                for( var i = 0; i < glitches.length; i++){
-                    that.model.glitches[i].prob = Math.random();
-                }
+            randProb: {
+                func: function(that){
+                    for( var i = 0; i < that.model.glitches.length; i++){
+                        that.model.glitches[i].prob = Math.random();
+                    }
+                },
+                args: ["{that}"]
             },
-            setup: function(that){
-                for(var i = 1; i < 9; i++){
-                    that.model.glitches.push( flock.synth({
-                        synthDef:{
-                            ugen: "flock.ugen.playBuffer",
-                            buffer: {
-                                url: "glitchseq/beat" + i + ".wav"
-                            },
-                            trigger: {
-                                id: "trig",
-                                ugen: "flock.ugen.valueChangeTrigger"
+            setup: {
+                func: function(that){
+                    for(var i = 1; i < 9; i++){
+                        that.model.glitches.push( flock.synth({
+                            synthDef:{
+                                ugen: "flock.ugen.playBuffer",
+                                buffer: {
+                                    url: "glitchseq/beat" + i + ".wav"
+                                },
+                                trigger: {
+                                    id: "trig",
+                                    ugen: "flock.ugen.valueChangeTrigger"
+                                }
                             }
-                        }
-                    }));
-                    that.model.glitches[i-1].prob = 1;
-                }
+                        }));
+                        that.model.glitches[i-1].prob = 1;
+                    }
+                },
+                args: ["{that}"]
             }
         }
     });
@@ -694,38 +699,61 @@
         }
     });    
 
-    // not working?
-    fluid.defaults("adam.bandednoise", {
+    fluid.defaults("adam.noiseSynth", {
         gradeNames: "flock.synth",
-        model: {
-            noiz: []
-        },
+        
+        freq: 300,
+        
         synthDef: {
             ugen: "flock.ugen.sum",
-            sources: "{that}.model.noiz"
-        },
-        invokers:{
-            setup: function(that){
-                for (var i = 0; i < 10; i++){
-                    var ugenDef = {
-                        ugen: "flock.ugen.filter.biquad.bp",
-                        freq: (100 * i) + 300,
-                        q: 1,
-                        source: {
-                            ugen: "flock.ugen.whiteNoise"
-                        }
-                    };
-                    that.model.noiz.push(ugenDef)
+            sources: {
+                ugen: "flock.ugen.filter.biquad.bp",
+                freq: "{that}.options.freq",
+                q: 10,
+                source: {
+                    ugen: "flock.ugen.whiteNoise"
                 }
-            }
-        },
-        listeners: {
-            "onCreate.setup" : {
-                funcName: "{that}.setup",
-                args: "{that}"
             }
         }
     });
+
+
+    fluid.defaults("adam.noiseBand", {
+        gradeNames: "flock.band",
+        
+        numFreqBands: 10,
+        bandFreqMul: 100,
+        baseFreq: 300,
+        
+        noiseFrequencies: {
+            expander: {
+                funcName: "adam.noiseBand.generateFrequencies",
+                args: [
+                    "{that}.options.numFreqBands",
+                    "{that}.options.bandFreqMul",
+                    "{that}.options.baseFreq"
+                ]
+            }
+        },
+        
+        dynamicComponents: {
+            noiseSynth: {
+                sources: "{that}.options.noiseFrequencies",
+                type: "adam.noiseSynth",
+                options: {
+                    freq: "{source}"
+                }
+            }
+        }
+    });
+
+    adam.noiseBand.generateFrequencies = function (numFreqBands, bandFreqMul, baseFreq) {
+        return fluid.generate(numFreqBands, function (i) {
+            return (bandFreqMul * i) + baseFreq;
+        }, true);
+    };
+
+
 
     fluid.defaults("adam.triglidepan", {
         gradeNames: "flock.synth",
