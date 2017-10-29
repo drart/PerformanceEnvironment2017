@@ -4,6 +4,14 @@
 </head>
 <body>
     <div id="flockchans"></div>
+    <input type="checkbox" id="one">
+    <input type="checkbox" id="two">
+    <input type="checkbox" id="three">
+    <input type="checkbox" id="four">
+    <input type="checkbox" id="five">
+    <input type="checkbox" id="six">
+    <input type="checkbox" id="seven">
+    <input type="checkbox" id="eight">
     <script src="../node_modules/flocking/dist/flocking-all.js"></script>
     <script>
 
@@ -21,36 +29,52 @@
         var synth = flock.synth({
             synthDef: [
                 {
+                    id: "one",
                     ugen: "flock.ugen.sinOsc",
-                    freq: 300
+                    freq: 300,
+                    mul: 0,
                 },
                 {
+                    id: "two",
                     ugen: "flock.ugen.sinOsc",
-                    freq: 300
+                    freq: 300,
+                    mul: 0
                 },       
-                        {
+                {
+                    id: "three",
                     ugen: "flock.ugen.sinOsc",
-                    freq: 300
+                    freq: 300,
+                    mul: 0
                 },
-                        {
+                {
+                    id: "four",
                     ugen: "flock.ugen.sinOsc",
-                    freq: 300
+                    freq: 300,
+                    mul: 0
                 },
-                        {
+                {
+                    id: "five",
                     ugen: "flock.ugen.sinOsc",
-                    freq: 300
+                    freq: 300,
+                    mul: 0
                 },
-                        {
+                {
+                    id: "six",
                     ugen: "flock.ugen.sinOsc",
-                    freq: 300
+                    freq: 300,
+                    mul: 0
                 },
-                        {
+                {
+                    id: "seven",
                     ugen: "flock.ugen.sinOsc",
-                    freq: 300
+                    freq: 300,
+                    mul: 0
                 },
-                        {
+                {
+                    id: "eight",
                     ugen: "flock.ugen.sinOsc",
-                    freq: 300
+                    freq: 300,
+                    mul: 0
                 }
             ]
         });
@@ -58,6 +82,62 @@
         flock.enviro.shared.play();
 
         document.getElementById("flockchans").innerHTML = flock.enviro.shared.audioSystem.model.chans;
+        document.getElementById("one").onclick = function(e){
+            if( this.checked === true){
+                synth.set("one.mul", 0.25);
+                }else{
+                    synth.set("one.mul", 0);
+                }
+        };
+        document.getElementById("two").onclick = function(e){
+            if( this.checked === true){
+                synth.set("two.mul", 0.25);
+                }else{
+                    synth.set("two.mul", 0);
+                }
+        };
+        document.getElementById("three").onclick = function(e){
+            if( this.checked === true){
+                synth.set("three.mul", 0.25);
+                }else{
+                    synth.set("three.mul", 0);
+                }
+        };
+        document.getElementById("four").onclick = function(e){
+            if( this.checked === true){
+                synth.set("four.mul", 0.25);
+                }else{
+                    synth.set("four.mul", 0);
+                }
+        };
+        document.getElementById("five").onclick = function(e){
+            if( this.checked === true){
+                synth.set("five.mul", 0.25);
+                }else{
+                    synth.set("five.mul", 0);
+                }
+        };
+        document.getElementById("six").onclick = function(e){
+            if( this.checked === true){
+                synth.set("six.mul", 0.25);
+                }else{
+                    synth.set("six.mul", 0);
+                }
+        };
+        document.getElementById("seven").onclick = function(e){
+            if( this.checked === true){
+                synth.set("seven.mul", 0.25);
+                }else{
+                    synth.set("seven.mul", 0);
+                }
+        };
+        document.getElementById("eight").onclick = function(e){
+            if( this.checked === true){
+                synth.set("eight.mul", 0.25);
+                }else{
+                    synth.set("eight.mul", 0);
+                }
+        };
     </script>
 </body>
 </html>

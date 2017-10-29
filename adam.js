@@ -717,7 +717,9 @@
         }
     });
 
-
+    // help from colin clark
+    // https://gist.github.com/colinbdclark/ff036ffb9b79a5ddb27c199aec09f8ff
+    // https://gist.github.com/colinbdclark/1cec7c0fb1e66ac3cc1cb3936340b31f
     fluid.defaults("adam.noiseBand", {
         gradeNames: "flock.band",
         

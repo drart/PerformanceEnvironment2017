@@ -15,6 +15,9 @@ fluid.defaults("adam.midi.console", {
         "aftertouch.log": function(msg){
             console.log(msg)
         },
+        "pitchbend.log": function(msg){
+            console.log(msg)
+        }
     }
 });
 
@@ -41,6 +44,9 @@ fluid.defaults("adam.midi.domlog", {
                 if(msg.type === "aftertouch"){
                     $("#" + that.id + "-aftertouch").text(fluid.prettyPrintJSON(msg));
                 }
+                if(msg.type === "pitchbend"){
+                    $("#" + that.id + "-pitchbend").text(fluid.prettyPrintJSON(msg));
+                }
             },
             args: ["{that}", "{arguments}.0"]
         }
@@ -50,6 +56,7 @@ fluid.defaults("adam.midi.domlog", {
         "noteOff.domlog": "{that}.printor",
         "control.domlog": "{that}.printor",
         "aftertouch.domlog": "{that}.printor",
+        "pitchbend.domlog": "{that}.printor",
         "onReady.preapredom": "{that}.creator",
     }
 });
@@ -63,6 +70,7 @@ adam.midi.domlog.ready = function(that){
     $("<div/>").attr("id", that.id+"-noteoff").appendTo(that.options.domElement);
     $("<div/>").attr("id", that.id+"-cc").appendTo(that.options.domElement);
     $("<div/>").attr("id", that.id+"-aftertouch").appendTo(that.options.domElement);
+    $("<div/>").attr("id", that.id+"-pitchbend").appendTo(that.options.domElement);
 };
 
 /////////////////////////////////////////////
