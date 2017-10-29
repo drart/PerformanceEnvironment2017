@@ -15,7 +15,7 @@ wss.on("connection", function (socket) {
     if (perfomancehubsocket === undefined){
 
         perfomancehubsocket = new osc.WebSocketPort({
-            //metadata: true, // uncomment this to crash when UDP traffic arrives. websockets is fine.
+            metadata: true, 
             socket: socket
         });
         
@@ -44,6 +44,7 @@ wss.on("connection", function (socket) {
 });
 
 var udp = new osc.UDPPort({
+    metadata: true,
     localAddress: "0.0.0.0",
     localPort: 9000,
 });
@@ -62,6 +63,5 @@ var soundplane = new osc.UDPPort({
 });
 
 soundplane.open();
-
 
 

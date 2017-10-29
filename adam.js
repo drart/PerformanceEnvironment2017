@@ -549,14 +549,35 @@
     });
 
 
-    //var glitches = [];
-    //var glitchticks = 0;
-    /////// NOT WORKING
+    /////// NOW WORKING!!
     fluid.defaults("adam.glitchseq", {
         gradeNames: "flock.synth", 
         model: {
             beat: 0,
-            glitches: []
+            glitches: {
+                expander: {
+                    func: function(that){
+                        var g = [];
+                        for(var i = 1; i < 9; i++){
+                            g.push( flock.synth({
+                                synthDef:{
+                                    ugen: "flock.ugen.playBuffer",
+                                    buffer: {
+                                        url: "glitchseq/beat" + i + ".wav"
+                                    },
+                                    trigger: {
+                                        id: "trig",
+                                        ugen: "flock.ugen.valueChangeTrigger"
+                                    }
+                                }
+                            }));
+                            g[i-1].prob = 1;
+                        }
+                        return g;
+                    },
+                    args: ["{that}"]
+                }
+            }
         },
         synthDef: {
             ugen: "flock.ugen.triggerCallback",
@@ -578,9 +599,6 @@
                 }
             }
         },
-        listeners: {
-                "onCreate.setup": "{that}.setup"
-        },
         invokers:{
             scatter: {
                 func: function(that){
@@ -596,26 +614,6 @@
                 },
                 args: ["{that}"]
             },
-            setup: {
-                func: function(that){
-                    for(var i = 1; i < 9; i++){
-                        that.model.glitches.push( flock.synth({
-                            synthDef:{
-                                ugen: "flock.ugen.playBuffer",
-                                buffer: {
-                                    url: "glitchseq/beat" + i + ".wav"
-                                },
-                                trigger: {
-                                    id: "trig",
-                                    ugen: "flock.ugen.valueChangeTrigger"
-                                }
-                            }
-                        }));
-                        that.model.glitches[i-1].prob = 1;
-                    }
-                },
-                args: ["{that}"]
-            }
         }
     });
 
@@ -786,6 +784,63 @@
                 },
                 mul: 0.25
             }
+        }
+    });
+
+
+    ////////
+    fluid.defaults("adam.synth", {
+        gradeNames: "flock.synth",
+        bus: 0, 
+        synthDef: {
+            ugen: "flock.ugen.out",
+            bus: "{that}.options.bus",
+            expand: "{that}.options.chans", 
+            mul: {
+                id: "env",
+                ugen: "flock.ugen.asr",
+                start: 0,
+                attack: 0.1,
+                sustain: 0.25, 
+                release: 0.5
+            }
+
+        }
+    });
+
+    // not quite working...
+    fluid.defaults("adam.effectsbus", {
+        gradeNames: "flock.synth", 
+        bus : {
+            expander: {
+                func: function(){
+                    ///// bad idea
+                    return flock.environment.busManager.acquireNextBus("interconnect");
+                }
+            }
+        },
+        addToEnvironment: "tail",
+        synthDef: {
+            id: "freebird",
+            ugen: "flock.ugen.freeverb",
+            source: {
+                ugen: "flock.ugen.in",
+                bus: "{that}.options.bus",
+            }
+        } 
+    });
+
+    // working great
+    fluid.defaults("adam.testsinesynth", {
+        gradeNames: "adam.synth",
+        chans: 1,
+        synthDef: {
+            sources: [
+                {
+                    ugen: "flock.ugen.sinOsc",
+                    freq: 500,
+                }
+            ]
         }
     });
 
