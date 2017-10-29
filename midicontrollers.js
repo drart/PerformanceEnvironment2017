@@ -214,6 +214,50 @@ fluid.defaults("adam.midi.bcr2000.october2017", {
     }
 });
 
+fluid.defaults("adam.midi.bcr2000.november2017", {
+    gradeNames: ["adam.midi.bcr2000", "adam.midi.domlog"],
+    listeners: {
+        control: function (msg) {
+            if(msg.number ===81){
+                octopus.set("f1.mul", msg.value / 127);
+            }
+            if(msg.number ===82){
+                octopus.set("f2.mul", msg.value / 127);
+            }
+            if(msg.number ===83){
+                octopus.set("f3.mul", msg.value / 127);
+            }
+            if(msg.number ===84){
+                octopus.set("f4.mul", msg.value / 127);
+            }
+            if(msg.number ===85){
+                octopus.set("f5.mul", msg.value / 127);
+            }
+            if(msg.number ===86){
+                octopus.set("f6.mul", msg.value / 127);
+            }
+            if(msg.number ===87){
+                octopus.set("f7.mul", msg.value / 127);
+            }
+            if(msg.number ===88){
+                octopus.set("f8.mul", msg.value / 127);
+            }
+            if(msg.number === 89){
+                octopus.scatter();
+            }
+            if(msg.number === 90){
+                octopus.scatterratio(300,1.06,30);
+            }
+            if(msg.number === 91){
+                octopus.scatterratio(305,1.06* 1.06,30);
+            }
+            if(msg.number === 92){
+                octopus.scatterratio(299,1.04,30);
+            }
+        }
+    }
+});
+
 /*
  * // the future!!!
 fluid.defaults("adam.midi.bcr2000", {

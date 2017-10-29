@@ -15,6 +15,7 @@ wss.on("connection", function (socket) {
     if (perfomancehubsocket === undefined){
 
         perfomancehubsocket = new osc.WebSocketPort({
+            //metadata: true, // uncomment this to crash when UDP traffic arrives. websockets is fine.
             socket: socket
         });
         
@@ -29,6 +30,7 @@ wss.on("connection", function (socket) {
     }else{
     
         var socketPort = new osc.WebSocketPort({
+            metadata: true,
             socket: socket
         });
 
