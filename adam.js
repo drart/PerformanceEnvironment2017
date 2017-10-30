@@ -1,6 +1,39 @@
 (function(){
     var adam = fluid.registerNamespace("adam");
- 
+
+
+
+    /*noizilator
+     *
+     * 500ms line from prev to current midi
+     * phasor -> tanh -> env -> decimate -> pan
+     *
+     *
+     * sawOsc -> flock.ugen.distortion.tanh -> env -> flock.ugen.distortion.deJonge
+     * tarrabiaDeJonge
+     */
+
+    fluid.defaults("adam.noizilator", {
+        gradeNames: "flock.synth",
+        synthDef: {
+            ugen: "flock.ugen.sawOsc",
+                freq: {
+                ugen: "flock.ugen.mouse.cursor",
+                    mul: 500,
+                    add: 100
+                },
+                mul: {
+                    ugen: "flock.ugen.asr",
+                    attack: 0.25,
+                    sustain: 0.25,
+                    release: 0.5,
+                    gate: {
+                        ugen: "flock.ugen.mouse.click"
+                    }
+             }
+        } 
+    });
+
     //////
     // Simple Sine Synth
     //////
@@ -789,6 +822,8 @@
 
 
     ////////
+    // New Style
+    ////////
     fluid.defaults("adam.synth", {
         gradeNames: "flock.synth",
         bus: 0, 
@@ -809,6 +844,10 @@
     });
 
     // not quite working...
+    // how to use buses in flocking
+    // https://gist.github.com/colinbdclark/0bd443589eec51d0756bff736e6c346d
+    // multichannel chord 
+    // https://gist.github.com/colinbdclark/483e5f1befd882b29869e39bc973cfd4
     fluid.defaults("adam.effectsbus", {
         gradeNames: "flock.synth", 
         bus : {
