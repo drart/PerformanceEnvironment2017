@@ -1,0 +1,84 @@
+
+<html>
+    <head>
+        <script src="node_modules/osc/dist/osc-browser.min.js"></script>
+        <script src="node_modules/pressure/dist/pressure.min.js"></script>
+        <style>
+            html, body { overflow: hidden; margin: 0; padding: 0; }
+        </style>
+    </head>
+    <body>
+        <div id="pressure"></div>
+        <div id="mousex"></div>
+        <div id="mousey"></div>
+        <div id="azimuth"></div>
+        <div id="altitude"></div>
+
+        <script>
+            var iptarget = prompt("Put in an IP target");
+            iptarget = (iptarget === null)? "localhost": iptarget;
+
+            var oscPort = new osc.WebSocketPort({
+                url: "ws://" + iptarget + ":9000", // URL to your Web Socket server.
+                metadata: true
+            });
+            oscPort.open();
+            oscPort.on("message", function(msg){
+                console.log(msg); 
+            });
+
+            Pressure.set('body', {
+                change: function(force){
+                    document.getElementById("pressure").innerHTML = force;
+
+                    oscPort.send({
+                        address: "/pressurexy",
+                        args: [
+                            {
+                                type: "f",
+                                value: force
+                            },
+                            {
+                                type: "f",
+                                value: parseFloat(document.getElementById("mousex").innerHTML)
+                            },
+                            {
+                                type: "f",
+                                value: parseFloat(document.getElementById("mousey").innerHTML)
+                            },
+                            {
+                                type: "f",
+                                value: parseFloat(document.getElementById("aziumth").innerHTML)
+                            },
+                            {
+                                type: "f",
+                                value: parseFloat(document.getElementById("altitude").innerHTML)
+                            },
+                        ]
+                    });
+                }
+            });
+
+            function printMousePos(event) {
+                event.preventDefault();
+                document.getElementById("mousex").innerHTML = event.clientX;
+                document.getElementById("mousey").innerHTML = event.clientY;
+            }
+
+            document.addEventListener("mousemove", printMousePos);
+            document.addEventListener("mousedown", printMousePos);
+            document.addEventListener("mouseup", printMousePos);
+
+            function printTouchPos(event) {
+                event.preventDefault();
+                document.getElementById("mousex").innerHTML = event.touches[0].clientX;
+                document.getElementById("mousey").innerHTML = event.touches[0].clientY;
+	        document.getElementById("azimuth").innerHTML = event.touches[0].azimuthAngle;
+                document.getElementById("altitude").innerHTML = event.touches[0].altitudeAngle;
+            }
+            document.addEventListener("touchstart", printTouchPos);
+            document.addEventListener("touchmove", printTouchPos);
+            document.addEventListener("touchend", printTouchPos);
+        </script>
+    </body>
+</html>
