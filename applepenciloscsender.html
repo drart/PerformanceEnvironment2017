@@ -2,7 +2,6 @@
 <html>
     <head>
         <script src="node_modules/osc/dist/osc-browser.min.js"></script>
-        <script src="node_modules/pressure/dist/pressure.min.js"></script>
         <style>
             html, body { overflow: hidden; margin: 0; padding: 0; }
         </style>
@@ -14,6 +13,7 @@
         <div id="azimuth"></div>
         <div id="altitude"></div>
 
+        <div id="console"></div>
         <script>
             var iptarget = prompt("Put in an IP target");
             iptarget = (iptarget === null)? "localhost": iptarget;
@@ -27,55 +27,72 @@
                 console.log(msg); 
             });
 
-            Pressure.set('body', {
-                change: function(force){
-                    document.getElementById("pressure").innerHTML = force;
-
-                    oscPort.send({
-                        address: "/pressurexy",
-                        args: [
-                            {
-                                type: "f",
-                                value: force
-                            },
-                            {
-                                type: "f",
-                                value: parseFloat(document.getElementById("mousex").innerHTML)
-                            },
-                            {
-                                type: "f",
-                                value: parseFloat(document.getElementById("mousey").innerHTML)
-                            },
-                            {
-                                type: "f",
-                                value: parseFloat(document.getElementById("aziumth").innerHTML)
-                            },
-                            {
-                                type: "f",
-                                value: parseFloat(document.getElementById("altitude").innerHTML)
-                            },
-                        ]
-                    });
-                }
-            });
-
-            function printMousePos(event) {
-                event.preventDefault();
-                document.getElementById("mousex").innerHTML = event.clientX;
-                document.getElementById("mousey").innerHTML = event.clientY;
-            }
-
-            document.addEventListener("mousemove", printMousePos);
-            document.addEventListener("mousedown", printMousePos);
-            document.addEventListener("mouseup", printMousePos);
+            document.addEventListener("mousemove", printTouchPos);
+            document.addEventListener("mousedown", printTouchPos);
+            document.addEventListener("mouseup", printTouchPos);
 
             function printTouchPos(event) {
                 event.preventDefault();
-                document.getElementById("mousex").innerHTML = event.touches[0].clientX;
-                document.getElementById("mousey").innerHTML = event.touches[0].clientY;
-	        document.getElementById("azimuth").innerHTML = event.touches[0].azimuthAngle;
-                document.getElementById("altitude").innerHTML = event.touches[0].altitudeAngle;
+
+                var oscMessage = {
+                    address:  "/pressurexy",
+                    args: []
+                };
+
+                if (event.clientX !== undefined){
+                    document.getElementById("mousex").innerHTML = event.clientX;
+                    oscMessage.args.push({
+                        type: "f",
+                        value: event.clientX
+                    });
+                    document.getElementById("mousey").innerHTML = event.clientY;
+                    oscMessage.args.push({
+                        type: "f",
+                        value: event.clientY
+                    });
+                }else{
+                    document.getElementById("mousex").innerHTML = event.touches[0].clientX;
+                    oscMessage.args.push({
+                        type: "f",
+                        value: event.touches[0].clientX
+                    });
+                    document.getElementById("mousey").innerHTML = event.touches[0].clientY;
+                    oscMessage.args.push({
+                        type: "f",
+                        value: event.touches[0].clientY
+                    });
+                    if( event.touches[0].azimuthAngle !== undefined){
+                        document.getElementById("azimuth").innerHTML = event.touches[0].azimuthAngle;
+                        oscMessage.args.push({
+                            type: "f",
+                            value: event.touches[0].azimuthAngle
+                        });
+                    }
+                    if( event.touches[0].azimuthAngle !== undefined){
+                        document.getElementById("altitude").innerHTML = event.touches[0].altitudeAngle;
+                        oscMessage.args.push({
+                            type: "f",
+                            value: event.touches[0].altitudeAngle
+                        });
+                    }
+                    if( event.touches[0].azimuthAngle !== undefined){
+                        document.getElementById("pressure").innerHTML = event.touches[0].force;
+                        oscMessage.args.push({
+                            type: "f",
+                            value: event.touches[0].force
+                        });
+                    }
+
+                    for(var i = 0; i < event.targetTouches.length; i++){
+                        if(event.targetTouches[i].force !== undefined){
+                            //document.getElementById("pressure").innerHTML = event.touches[i].force;
+                        } 
+                    }
+                }
+
+                oscPort.send(oscMessage);
             }
+
             document.addEventListener("touchstart", printTouchPos);
             document.addEventListener("touchmove", printTouchPos);
             document.addEventListener("touchend", printTouchPos);

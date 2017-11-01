@@ -34,6 +34,10 @@ wss.on("connection", function (socket) {
             socket: socket
         });
 
+        socketPort.on("message", function(msg){
+            console.log(msg); 
+        });
+
         var websocketrelay = new osc.Relay(socketPort, perfomancehubsocket, {
             raw: true
         });
