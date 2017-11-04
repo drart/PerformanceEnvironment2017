@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<head>
+    <title>Quad with volume</title>
+</head>
+<body>
+    <div id="flockchans"></div>
+    <input type="range" id="vol">Volume <br/>
+    <script src="../node_modules/flocking/dist/flocking-all.js"></script>
+    <script src="../adam.js"></script>
+    <script>
+
+        flock.init({
+            chans: 4
+        });
+
+        flock.enviro.shared.play();
+
+        var octopus = adam.octopus();
+
+        document.getElementById("flockchans").innerHTML = flock.enviro.shared.audioSystem.model.chans;
+        document.getElementById("vol").oninput = function(event){
+            console.log(this.value); 
+            //octopus.setall(this.value);
+        };
+    </script>
+</body>
+</html>

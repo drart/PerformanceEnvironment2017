@@ -39,6 +39,7 @@
                     args: []
                 };
 
+                /// mouse event
                 if (event.clientX !== undefined){
                     document.getElementById("mousex").innerHTML = event.clientX;
                     oscMessage.args.push({
@@ -50,7 +51,7 @@
                         type: "f",
                         value: event.clientY
                     });
-                }else{
+                }else{ /// touch event
                     document.getElementById("mousex").innerHTML = event.touches[0].clientX;
                     oscMessage.args.push({
                         type: "f",
@@ -96,6 +97,7 @@
             document.addEventListener("touchstart", printTouchPos);
             document.addEventListener("touchmove", printTouchPos);
             document.addEventListener("touchend", printTouchPos);
+            document.addEventListener("touchforcechange", printTouchPos);
         </script>
     </body>
 </html>
