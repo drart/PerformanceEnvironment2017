@@ -12,8 +12,12 @@
     <input type="checkbox" id="six">
     <input type="checkbox" id="seven">
     <input type="checkbox" id="eight">
+    <input type="range" id="vol">Volume <br/>
     <script src="../node_modules/flocking/dist/flocking-all.js"></script>
+    <script src="../adam.js"></script>
     <script>
+
+        var vols = 0.25;
 
         /*
         flock.init({
@@ -26,117 +30,71 @@
             chans: 8
         });
 
-        var synth = flock.synth({
-            synthDef: [
-                {
-                    id: "one",
-                    ugen: "flock.ugen.sinOsc",
-                    freq: 300,
-                    mul: 0,
-                },
-                {
-                    id: "two",
-                    ugen: "flock.ugen.sinOsc",
-                    freq: 300,
-                    mul: 0
-                },       
-                {
-                    id: "three",
-                    ugen: "flock.ugen.sinOsc",
-                    freq: 300,
-                    mul: 0
-                },
-                {
-                    id: "four",
-                    ugen: "flock.ugen.sinOsc",
-                    freq: 300,
-                    mul: 0
-                },
-                {
-                    id: "five",
-                    ugen: "flock.ugen.sinOsc",
-                    freq: 300,
-                    mul: 0
-                },
-                {
-                    id: "six",
-                    ugen: "flock.ugen.sinOsc",
-                    freq: 300,
-                    mul: 0
-                },
-                {
-                    id: "seven",
-                    ugen: "flock.ugen.sinOsc",
-                    freq: 300,
-                    mul: 0
-                },
-                {
-                    id: "eight",
-                    ugen: "flock.ugen.sinOsc",
-                    freq: 300,
-                    mul: 0
-                }
-            ]
-        });
+        var synth = adam.octopus();
 
         flock.enviro.shared.play();
 
         document.getElementById("flockchans").innerHTML = flock.enviro.shared.audioSystem.model.chans;
+
         document.getElementById("one").onclick = function(e){
             if( this.checked === true){
-                synth.set("one.mul", 0.25);
+                synth.set("f1.mul", vols);
                 }else{
-                    synth.set("one.mul", 0);
+                    synth.set("f1.mul", 0);
                 }
         };
         document.getElementById("two").onclick = function(e){
             if( this.checked === true){
-                synth.set("two.mul", 0.25);
+                synth.set("f2.mul", vols);
                 }else{
-                    synth.set("two.mul", 0);
+                    synth.set("f2.mul", 0);
                 }
         };
         document.getElementById("three").onclick = function(e){
             if( this.checked === true){
-                synth.set("three.mul", 0.25);
+                synth.set("f3.mul", vols);
                 }else{
-                    synth.set("three.mul", 0);
+                    synth.set("f3.mul", 0);
                 }
         };
         document.getElementById("four").onclick = function(e){
             if( this.checked === true){
-                synth.set("four.mul", 0.25);
+                synth.set("f4.mul", vols);
                 }else{
-                    synth.set("four.mul", 0);
+                    synth.set("f4.mul", 0);
                 }
         };
         document.getElementById("five").onclick = function(e){
             if( this.checked === true){
-                synth.set("five.mul", 0.25);
+                synth.set("f5.mul", vols);
                 }else{
-                    synth.set("five.mul", 0);
+                    synth.set("f5.mul", 0);
                 }
         };
         document.getElementById("six").onclick = function(e){
             if( this.checked === true){
-                synth.set("six.mul", 0.25);
+                synth.set("f6.mul", vols);
                 }else{
-                    synth.set("six.mul", 0);
+                    synth.set("f6.mul", 0);
                 }
         };
         document.getElementById("seven").onclick = function(e){
             if( this.checked === true){
-                synth.set("seven.mul", 0.25);
+                synth.set("f7.mul", vols);
                 }else{
-                    synth.set("seven.mul", 0);
+                    synth.set("f7.mul", 0);
                 }
         };
         document.getElementById("eight").onclick = function(e){
             if( this.checked === true){
-                synth.set("eight.mul", 0.25);
+                synth.set("f8.mul", vols);
                 }else{
-                    synth.set("eight.mul", 0);
+                    synth.set("f8.mul", 0);
                 }
+        };
+        document.getElementById("vol").oninput = function(event){
+            vols = adam.dbtorms(this.value);
+            synth.setallvol(this.value);
         };
     </script>
 </body>

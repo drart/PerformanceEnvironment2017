@@ -53,6 +53,18 @@
         }
     });
 
+    fluid.defaults("adam.bopper", {
+        gradeNames: "adam.bop",
+        synthDef: {
+            freq:{
+                ugen: "flock.ugen.sinOsc",
+                freq: 10, 
+                add: 400,
+                mul: 1
+            }
+        }
+    });
+
     fluid.defaults("adam.tick", {
         gradeNames: "flock.synth", 
         synthDef: {
@@ -893,6 +905,14 @@
             ]
         }
     });
+
+    //// adapted from STD.dbtorms in ChucK
+    adam.dbtorms = function (val){
+        var logten = Math.log(10);
+        return  (val<=0)? 0: Math.exp( (logten * 0.05) * (val-100));
+    };
+
+
 
     // detect node.js environement
     if (typeof module !== 'undefined' && module.exports) {
