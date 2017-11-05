@@ -195,6 +195,10 @@
             scatterratio: {
                 funcName: "adam.octopus.ratiofader",
                 args: ["{arguments}.0", "{arguments}.1", "{arguments}.2", "{that}"]
+            },
+            setallvol: {
+                funcName: "adam.octopus.setallvol",
+                args: ["{arguments}.0", "{that}"]
             }
         },
         synthDef: [
@@ -269,7 +273,7 @@
             console.log(xx);
             that.set("f"+(i+1)+".freq", xx);
         }
-    }
+    };
 
     adam.octopus.ratiofader = function (v,r,t,that){
         var that = that;
@@ -281,7 +285,14 @@
             v *= r;
             console.log( that.get("f"+(i+1)+".freq"));
         }
-    }
+    };
+
+    adam.octopus.setallvol = function(v, that){
+        var that = that;
+        for (var i = 0 ; i < 8; i++){
+            that.set( "f" + (i+1)+".mul", adam.dbtorms(v) );
+        }
+    };
 
     // from hexapod
     fluid.defaults("adam.stereoclick", {

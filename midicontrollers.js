@@ -277,3 +277,9 @@ function dbtorms (val){
     var logten = Math.log(10);
     return  (val<=0)? 0: Math.exp( (logten * 0.05) * (val-100));
 }
+
+if (adam !== undefined){
+    adam.dbtorms = dbtorms;
+}
+
+

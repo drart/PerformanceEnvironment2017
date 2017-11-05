@@ -7,6 +7,7 @@
     <input type="range" id="vol">Volume <br/>
     <script src="../node_modules/flocking/dist/flocking-all.js"></script>
     <script src="../adam.js"></script>
+    <script src="../midicontrollers.js"></script>
     <script>
 
         flock.init({
@@ -19,8 +20,7 @@
 
         document.getElementById("flockchans").innerHTML = flock.enviro.shared.audioSystem.model.chans;
         document.getElementById("vol").oninput = function(event){
-            console.log(this.value); 
-            //octopus.setall(this.value);
+            octopus.setallvol(this.value);
         };
     </script>
 </body>
