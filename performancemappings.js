@@ -223,4 +223,9 @@ function november2017(){
         window.push = adam.midi.push.november2017();
         window.bcr2000 = adam.midi.bcr2000.november2017();
     }
+    oscPort.on("message", function(msg){
+        if(msg.address === "/pressurexy"){
+            console.log(msg.args);
+        }
+    });
 }

@@ -19,14 +19,11 @@
             });
             oscPort.open();
             oscPort.on("message", function(msg){
-                console.log(msg); 
+                //console.log(msg); 
                 $("#osctarget").text(fluid.prettyPrintJSON(msg));
             });
         </script>
-
-        <!--div> https://github.com/colinbdclark/Flocking/issues/8#issuecomment-108712105  --  How to use envGen</div>
-        <div> https://github.com/colinbdclark/Flocking/issues/128 -- changing ugens on the fly</div-->
-
+        
         <hr>
 
         <input type="checkbox" id="sf1" name="sf1"><span id="sf1-label"></span>
@@ -100,6 +97,7 @@
                 window.bcr2000 = adam.midi.bcr2000.november2017();
             }
         </script-->
+
         <script src="performancemappings.js"> </script> 
         <script> 
             //october2017();

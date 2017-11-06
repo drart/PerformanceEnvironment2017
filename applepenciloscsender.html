@@ -62,27 +62,34 @@
                         type: "f",
                         value: event.touches[0].clientY
                     });
-                    if( event.touches[0].azimuthAngle !== undefined){
-                        document.getElementById("azimuth").innerHTML = event.touches[0].azimuthAngle;
-                        oscMessage.args.push({
-                            type: "f",
-                            value: event.touches[0].azimuthAngle
-                        });
+
+                    document.getElementById("pressure").innerHTML = event.touches[0].force;
+                    oscMessage.args.push({
+                        type: "f",
+                        value: event.touches[0].force
+                    });
+
+                    if (event.touches[0].touchType === "stylus"){
+                        oscMessage.address = "/applepencil";
+                    
+                        if( event.touches[0].azimuthAngle !== undefined){
+                            document.getElementById("azimuth").innerHTML = event.touches[0].azimuthAngle;
+                            oscMessage.args.push({
+                                type: "f",
+                                value: event.touches[0].azimuthAngle
+                            });
+                        }
+                        if( event.touches[0].azimuthAngle !== undefined){
+                            document.getElementById("altitude").innerHTML = event.touches[0].altitudeAngle;
+                            oscMessage.args.push({
+                                type: "f",
+                                value: event.touches[0].altitudeAngle
+                            });
+                        }
                     }
-                    if( event.touches[0].azimuthAngle !== undefined){
-                        document.getElementById("altitude").innerHTML = event.touches[0].altitudeAngle;
-                        oscMessage.args.push({
-                            type: "f",
-                            value: event.touches[0].altitudeAngle
-                        });
-                    }
-                    if( event.touches[0].azimuthAngle !== undefined){
-                        document.getElementById("pressure").innerHTML = event.touches[0].force;
-                        oscMessage.args.push({
-                            type: "f",
-                            value: event.touches[0].force
-                        });
-                    }
+
+
+
 
                     for(var i = 0; i < event.targetTouches.length; i++){
                         if(event.targetTouches[i].force !== undefined){

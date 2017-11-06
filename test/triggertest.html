@@ -18,13 +18,13 @@
                 ugen: "flock.ugen.playBuffer",
                 buffer: {
                     id: "beat",
-                    url: "../beat1.wav"
+                    url: "../glitchseq/beat1.wav"
                 },
                 trigger: {
                     id: "trig",
                     ugen: "flock.ugen.valueChangeTrigger",
                     options:{
-                        triggerOnSetSameValue: false
+                        triggerOnSetSameValue: true
                     },
                     source: 0
                 }
@@ -40,6 +40,7 @@
                 noteOn: function (msg) {
                     $("#boppad-midi-display").text(fluid.prettyPrintJSON(msg));
                     if (msg.note >= 68 && msg.note <= 83){
+                        beat.set("trig.source", 1);
                     }
                 },
                 noteOff: function (msg) {

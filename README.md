@@ -18,3 +18,10 @@ Stuff to do
 - Add in a drum interface
 - add an iMS-20 mapping
 - ugen.scope for monitoring output
+
+
+
+Things to read
+- https://github.com/colinbdclark/Flocking/issues/8#issuecomment-108712105  --  How to use envGen
+- https://github.com/colinbdclark/Flocking/issues/128 -- changing ugens on the fly
+
