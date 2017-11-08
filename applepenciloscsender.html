@@ -1,4 +1,3 @@
-
 <html>
     <head>
         <script src="node_modules/osc/dist/osc-browser.min.js"></script>
@@ -14,6 +13,7 @@
         <div id="altitude"></div>
 
         <div id="console"></div>
+        <div id="numtouches"></div>
         <script>
             var iptarget = prompt("Put in an IP target");
             iptarget = (iptarget === null)? "localhost": iptarget;
@@ -31,11 +31,18 @@
             document.addEventListener("mousedown", printTouchPos);
             document.addEventListener("mouseup", printTouchPos);
 
+	    var touchdivs = []; 
+	
+	    for ( var i = 0; i < 12; i++){ // 12 is the limit for apple devices
+		touchdivs.push( document.createElement('div') );
+		document.body.appendChild( touchdivs[i] );
+            }
+
             function printTouchPos(event) {
                 event.preventDefault();
 
                 var oscMessage = {
-                    address:  "/pressurexy",
+                    address:  "/mouse",
                     args: []
                 };
 
@@ -52,7 +59,13 @@
                         value: event.clientY
                     });
                 }else{ /// touch event
+		    for (var i = 0; i <  event.touches.length; i++ ){
+
+			document.getElementById("numtouches").innerHTML = event.touches.length;
+
+
                     document.getElementById("mousex").innerHTML = event.touches[0].clientX;
+			oscMessage.address = "/touch";
                     oscMessage.args.push({
                         type: "f",
                         value: event.touches[0].clientX
@@ -70,7 +83,7 @@
                     });
 
                     if (event.touches[0].touchType === "stylus"){
-                        oscMessage.address = "/applepencil";
+                        oscMessage.address = "/stylus";
                     
                         if( event.touches[0].azimuthAngle !== undefined){
                             document.getElementById("azimuth").innerHTML = event.touches[0].azimuthAngle;
@@ -88,17 +101,10 @@
                         }
                     }
 
-
-
-
-                    for(var i = 0; i < event.targetTouches.length; i++){
-                        if(event.targetTouches[i].force !== undefined){
-                            //document.getElementById("pressure").innerHTML = event.touches[i].force;
-                        } 
-                    }
                 }
 
-                oscPort.send(oscMessage);
+			oscPort.send(oscMessage);
+		}
             }
 
             document.addEventListener("touchstart", printTouchPos);
