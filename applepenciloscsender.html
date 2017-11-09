@@ -31,11 +31,11 @@
             document.addEventListener("mousedown", printTouchPos);
             document.addEventListener("mouseup", printTouchPos);
 
-	    var touchdivs = []; 
-	
-	    for ( var i = 0; i < 12; i++){ // 12 is the limit for apple devices
-		touchdivs.push( document.createElement('div') );
-		document.body.appendChild( touchdivs[i] );
+            var touchdivs = []; 
+
+            for ( var i = 0; i < 12; i++){ // 12 is the limit for apple devices
+                touchdivs.push( document.createElement('div') );
+                document.body.appendChild( touchdivs[i] );
             }
 
             function printTouchPos(event) {
@@ -48,6 +48,7 @@
 
                 /// mouse event
                 if (event.clientX !== undefined){
+
                     document.getElementById("mousex").innerHTML = event.clientX;
                     oscMessage.args.push({
                         type: "f",
@@ -58,59 +59,70 @@
                         type: "f",
                         value: event.clientY
                     });
+                    document.getElementById("console").innerHTML = event.buttons;
+                    oscMessage.args.push({
+                        type: "f",
+                        value: event.buttons
+                    });
+
+                    oscPort.send(oscMessage);
+
                 }else{ /// touch event
-		    for (var i = 0; i <  event.touches.length; i++ ){
+                    for (var i = 0; i <  event.touches.length; i++ ){
+                        document.getElementById("numtouches").innerHTML = event.touches.length;
 
-			document.getElementById("numtouches").innerHTML = event.touches.length;
+                        document.getElementById("mousex").innerHTML = event.touches[0].clientX;
+                        oscMessage.address = "/touch";
+                        oscMessage.args.push({
+                            type: "f",
+                            value: event.touches[0].clientX
+                        });
+                        document.getElementById("mousey").innerHTML = event.touches[0].clientY;
+                        oscMessage.args.push({
+                            type: "f",
+                            value: event.touches[0].clientY
+                        });
 
+                        document.getElementById("pressure").innerHTML = event.touches[0].force;
+                        oscMessage.args.push({
+                            type: "f",
+                            value: event.touches[0].force
+                        });
 
-                    document.getElementById("mousex").innerHTML = event.touches[0].clientX;
-			oscMessage.address = "/touch";
-                    oscMessage.args.push({
-                        type: "f",
-                        value: event.touches[0].clientX
-                    });
-                    document.getElementById("mousey").innerHTML = event.touches[0].clientY;
-                    oscMessage.args.push({
-                        type: "f",
-                        value: event.touches[0].clientY
-                    });
+                        if (event.touches[0].touchType === "stylus"){
+                            oscMessage.address = "/stylus";
 
-                    document.getElementById("pressure").innerHTML = event.touches[0].force;
-                    oscMessage.args.push({
-                        type: "f",
-                        value: event.touches[0].force
-                    });
-
-                    if (event.touches[0].touchType === "stylus"){
-                        oscMessage.address = "/stylus";
-                    
-                        if( event.touches[0].azimuthAngle !== undefined){
-                            document.getElementById("azimuth").innerHTML = event.touches[0].azimuthAngle;
-                            oscMessage.args.push({
-                                type: "f",
-                                value: event.touches[0].azimuthAngle
-                            });
+                            if( event.touches[0].azimuthAngle !== undefined){
+                                document.getElementById("azimuth").innerHTML = event.touches[0].azimuthAngle;
+                                oscMessage.args.push({
+                                    type: "f",
+                                    value: event.touches[0].azimuthAngle
+                                });
+                            }
+                            if( event.touches[0].azimuthAngle !== undefined){
+                                document.getElementById("altitude").innerHTML = event.touches[0].altitudeAngle;
+                                oscMessage.args.push({
+                                    type: "f",
+                                    value: event.touches[0].altitudeAngle
+                                });
+                            }
                         }
-                        if( event.touches[0].azimuthAngle !== undefined){
-                            document.getElementById("altitude").innerHTML = event.touches[0].altitudeAngle;
-                            oscMessage.args.push({
-                                type: "f",
-                                value: event.touches[0].altitudeAngle
-                            });
-                        }
+                        oscPort.send(oscMessage);
                     }
-
                 }
-
-			oscPort.send(oscMessage);
-		}
             }
 
             document.addEventListener("touchstart", printTouchPos);
             document.addEventListener("touchmove", printTouchPos);
             document.addEventListener("touchend", printTouchPos);
             document.addEventListener("touchforcechange", printTouchPos);
+
+            // block contextual menu on right click
+            document.addEventListener("contextmenu", function(event){
+                event.preventDefault();
+                event.stopPropagation();
+                return false;
+            });
         </script>
     </body>
 </html>
