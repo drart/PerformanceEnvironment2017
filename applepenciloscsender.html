@@ -69,41 +69,42 @@
 
                 }else{ /// touch event
                     for (var i = 0; i <  event.touches.length; i++ ){
+                        oscMessage.args = [];
                         document.getElementById("numtouches").innerHTML = event.touches.length;
 
-                        document.getElementById("mousex").innerHTML = event.touches[0].clientX;
-                        oscMessage.address = "/touch";
+                        document.getElementById("mousex").innerHTML = event.touches[i].clientX;
+                        oscMessage.address = "/touch/" + event.touches[i].identifier;
                         oscMessage.args.push({
                             type: "f",
-                            value: event.touches[0].clientX
+                            value: event.touches[i].clientX
                         });
                         document.getElementById("mousey").innerHTML = event.touches[0].clientY;
                         oscMessage.args.push({
                             type: "f",
-                            value: event.touches[0].clientY
+                            value: event.touches[i].clientY
                         });
 
-                        document.getElementById("pressure").innerHTML = event.touches[0].force;
+                        document.getElementById("pressure").innerHTML = event.touches[i].force;
                         oscMessage.args.push({
                             type: "f",
-                            value: event.touches[0].force
+                            value: event.touches[i].force
                         });
 
-                        if (event.touches[0].touchType === "stylus"){
+                        if (event.touches[i].touchType === "stylus"){
                             oscMessage.address = "/stylus";
 
-                            if( event.touches[0].azimuthAngle !== undefined){
-                                document.getElementById("azimuth").innerHTML = event.touches[0].azimuthAngle;
+                            if( event.touches[i].azimuthAngle !== undefined){
+                                document.getElementById("azimuth").innerHTML = event.touches[i].azimuthAngle;
                                 oscMessage.args.push({
                                     type: "f",
-                                    value: event.touches[0].azimuthAngle
+                                    value: event.touches[i].azimuthAngle
                                 });
                             }
-                            if( event.touches[0].azimuthAngle !== undefined){
-                                document.getElementById("altitude").innerHTML = event.touches[0].altitudeAngle;
+                            if( event.touches[i].azimuthAngle !== undefined){
+                                document.getElementById("altitude").innerHTML = event.touches[i].altitudeAngle;
                                 oscMessage.args.push({
                                     type: "f",
-                                    value: event.touches[0].altitudeAngle
+                                    value: event.touches[i].altitudeAngle
                                 });
                             }
                         }

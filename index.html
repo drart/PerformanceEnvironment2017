@@ -19,8 +19,15 @@
             });
             oscPort.open();
             oscPort.on("message", function(msg){
-                //console.log(msg); 
-                $("#osctarget").text(fluid.prettyPrintJSON(msg));
+                if (document.getElementById(msg.address) === null){
+                    //console.log(fluid.prettyPrintJSON(msg)); 
+
+                    var newaddress = document.createElement("div");
+                    newaddress.id = msg.address;
+                    var recenttouch = document.getElementById("osctarget").firstChild;
+                    document.getElementById("osctarget").insertBefore(newaddress, recenttouch);
+                } 
+                document.getElementById(msg.address).innerHTML = fluid.prettyPrintJSON(msg); 
             });
         </script>
         
@@ -41,7 +48,9 @@
         <hr>
         <h2>OSC</h2>
 
-        <div id="osctarget"></div>
+        <div id="osctarget">
+            <div id="firstelementdummy"></div>
+        </div>
 
         <!--script>
             function october2017(){

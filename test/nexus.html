@@ -1,56 +1,65 @@
 <!DOCTYPE html>
 <head>
-  <title>Live</title>
-  <script src="node_modules/nexusui/dist/nexusUI.min.js"></script>
+  <title>Nexus + Flocking</title>
+  <script src="../node_modules/nexusui/dist/NexusUI.js"></script>
+  <script src="../node_modules/flocking/dist/flocking-all.min.js"></script>
 </head>
 
 <body>
 
+  <div id="meter"></div>
+  <div id="button1"></div>
+
+      <!--
   <canvas nx="multitouch"></canvas>
   <canvas nx="tilt"></canvas> 
 	
-  <!-- attach this to myos?  -->
+attach this to myos?  
   <canvas nx="multislider"></canvas>
 
   <canvas nx="waveform" style="width:900px;height:100px;display:block;margin:10px auto 0px"></canvas>
-  <canvas nx="waveform" style="width:900px;height:100px;display:block;margin:10px auto 0px"></canvas>
-  <canvas nx="waveform" style="width:900px;height:100px;display:block;margin:10px auto 0px"></canvas>
 
   <canvas nx="envelope"></canvas>
-  <canvas nx="envelope"></canvas>
 
-  <!--
-  <canvas nx="waveform"></canvas>
-  <canvas nx="waveform"></canvas>
-  <canvas nx="waveform"></canvas>
   <canvas nx="waveform"></canvas>
   -->
 
   <script>
-  
-    nx.onload = function(){
 
-        if(!nx.isTouchDevice){
-                tilt1.canvas.hidden = true;
-        };
+      flock.init();
+      var as = flock.webAudio.audioSystem.audioContextSingleton;
 
-        // set this up if myos?	
-        multislider1.setNumberOfSliders(3);
-        //multislider1.canvas.hidden = true;
 
-        /*
-        document.getElementById("onoff").onclick = function(val){
-            if (this.checked){
-                thing1.play();
-            }else{
-                thing1.pause();
-            }
-        };
-        */
-    };
-      
+      var synth = flock.synth({
+          synthDef: {
+              ugen: "flock.ugen.filter.biquad.hp",
+              freq: {
+                  ugen: "flock.ugen.sin",
+                  rate: "control",
+                  freq: {
+                      ugen: "flock.ugen.xLine",
+                      rate: "control",
+                      start: 0.7,
+                      end: 300,
+                      duration: 20
+                  },
+                  phase: 0,
+                  mul: 3600,
+                  add: 4000
+              },
+              source: {
+                  ugen: "flock.ugen.lfSaw",
+                  freq: 200,
+                  mul: 0.1
+              }
+          }
+      });
+
+      Nexus.context = as;
+      var meter = new Nexus.Meter("#meter");
+      meter.connect(as, 2);
+      var but = new Nexus.Button("#button1");
+
   </script>
-
-
 </body>
 </html>
