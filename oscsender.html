@@ -3,6 +3,7 @@
         <script src="node_modules/osc/dist/osc-browser.min.js"></script>
         <style>
             html, body { overflow: hidden; margin: 0; padding: 0; }
+            #resettarget{position:fixed; bottom: 5; right: 5;}
         </style>
     </head>
     <body>
@@ -14,18 +15,22 @@
 
         <div id="console"></div>
         <div id="numtouches"></div>
+        <button id="resettarget">Set target IP</button>
         <script>
-            var iptarget = prompt("Put in an IP target");
-            iptarget = (iptarget === null)? "localhost": iptarget;
+            var iptarget = localStorage.getItem("myperformancetarget"); 
+            iptarget = (iptarget === null)? prompt("Put in an IP target"): iptarget;
+            localStorage.setItem("myperformancetarget", iptarget);
 
             var oscPort = new osc.WebSocketPort({
                 url: "ws://" + iptarget + ":9000", // URL to your Web Socket server.
                 metadata: true
             });
             oscPort.open();
+            /*
             oscPort.on("message", function(msg){
                 console.log(msg); 
             });
+            */
 
             document.addEventListener("mousemove", printTouchPos);
             document.addEventListener("mousedown", printTouchPos);
@@ -123,6 +128,12 @@
                 event.preventDefault();
                 event.stopPropagation();
                 return false;
+            });
+            document.getElementById("resettarget").addEventListener("click", function(event){
+                iptarget = prompt("Put in an IP target");
+                if (iptarget !== null){
+                    localStorage.setItem("myperformancetarget", iptarget);
+                }
             });
         </script>
     </body>

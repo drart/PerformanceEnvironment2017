@@ -5,9 +5,9 @@ This is a Flocking.js project to collect my synths, mappings, and other ideas to
 
 - index.html: browser based hub (still working on a websockets solution)
 - server.js: node.js web and osc server
+- oscsender.html: interface to send osc messages for mouse, touch, and stylus 
 - pressuresynth.html: playing with pressure.js for 3D Touch and Apple Pencil
-- applepenciloscsender.html: pencil to OSC sender
-- pressureoscsender.html: sends pressure.js mouse, touch, and pointer via OSC
+- pressureoscsender-old.html: sends pressure.js mouse, touch, and pointer via OSC
 - tests: a number of proof of concept tools that are useful for me (maybe you too)
 
 Stuff to do
