@@ -44,6 +44,7 @@
             ugen: "flock.ugen.sinOsc",
             freq: 440,
             mul: {
+                id: "env",
                 ugen: "flock.ugen.asr",
                 start: 0.0,
                 attack: 0.01,
@@ -64,6 +65,25 @@
             }
         }
     });
+
+    fluid.defaults("adam.flutter", {
+        gradeNames: "adam.bop", 
+        synthDef: {
+            ugen: "flock.ugen.triOsc",
+            freq: {
+                ugen: "flock.ugen.square",
+                freq: 3,
+                mul: 80,
+                add: 500
+            }
+        }
+    });
+
+
+    adam.flutter.hardsync = function(freq, that){
+        // this.set("{that}".); 
+        // this.set("{that}.freq.phase", 0);
+    };
 
     fluid.defaults("adam.tick", {
         gradeNames: "flock.synth", 
@@ -906,13 +926,15 @@
         }
     });
 
+
+    adam.freqtoms = function(f){ return (1/f) * 1000 };
+    adam.mstofreq = function(ms){ return (1/ms) * 1000 };
+
     //// adapted from STD.dbtorms in ChucK
     adam.dbtorms = function (val){
         var logten = Math.log(10);
         return  (val<=0)? 0: Math.exp( (logten * 0.05) * (val-100));
     };
-
-
 
     // detect node.js environement
     if (typeof module !== 'undefined' && module.exports) {
