@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<head>
+    <title>Test BOPPAD</title>
+</head>
+
+<body>
+    <div id="boppad-midi-display"></div>
+    <script src="../node_modules/flocking/dist/flocking-all.js"></script>
+    <script src="../adam.js"></script>
+    <script>
+        flock.init({
+            chans: 4,
+            bufferSize: 256
+        });
+        var fl = adam.testsinesynth({bus:0});
+        var fr = adam.testsinesynth({bus:1});
+        var rl = adam.testsinesynth({bus:2});
+        var rr = adam.testsinesynth({bus:3});
+    </script>
+    <script>
+        var boppad = flock.midi.connection({
+            openImmediately: true,
+            ports: {
+                name : "BopPad"
+            },
+            listeners: {
+                noteOn: function (msg) {
+                    $("#boppad-midi-display").text(fluid.prettyPrintJSON(msg));
+
+                    switch (msg.note){
+                        case 40: 
+                            fl.noteOn();
+                            break;
+                        case 42: 
+                            fr.noteOn();
+                            break;
+                        case 42: 
+                            rl.noteOn();
+                            break;
+                        case 42: 
+                            rr.noteOn();
+                            break;
+                        default: 
+                            break; 
+                    }
+
+                },
+                noteOff: function (msg) {
+                    $("#boppad-midi-display").text(fluid.prettyPrintJSON(msg));
+
+                    switch (msg.note){
+                        case 40: 
+                            fl.noteOff();
+                            break;
+                        case 42: 
+                            fr.noteOff();
+                            break;
+                        case 42: 
+                            rl.noteOff();
+                            break;
+                        case 42: 
+                            rr.noteOff();
+                            break;
+                        default: 
+                            break; 
+                    }
+
+                },
+                control: function (msg) {
+                    $("#boppad-midi-display").text(fluid.prettyPrintJSON(msg));
+                },
+                pitchbend: function(msg) {
+                    $("#boppad-midi-display").text(fluid.prettyPrintJSON(msg));
+                },
+                aftertouch: function(msg){
+                    $("#boppad-midi-display").text(fluid.prettyPrintJSON(msg));
+                }
+            }
+        });
+    </script>
+</body>
+</html>
