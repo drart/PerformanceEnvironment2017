@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<head>
+  <title>Nexus + Flocking</title>
+  <script src="../node_modules/nexusui/dist/NexusUI.js"></script>
+  <script src="../node_modules/flocking/dist/flocking-all.min.js"></script>
+</head>
+
+<body>
+
+  <div id="panner"></div>
+  <div id="l1"> </div>
+  <div id="l2"> </div>
+  <div id="l3"> </div>
+  <div id="l4"> </div>
+  <div id="l5"> </div>
+
+  <script>
+
+      flock.init();
+
+      var synth = flock.synth({
+          synthDef: {
+              ugen: "flock.ugen.filter.biquad.hp",
+              freq: {
+                  ugen: "flock.ugen.sin",
+                  rate: "control",
+                  freq: {
+                      ugen: "flock.ugen.xLine",
+                      rate: "control",
+                      start: 0.7,
+                      end: 300,
+                      duration: 20
+                  },
+                  phase: 0,
+                  mul: 3600,
+                  add: 4000
+              },
+              source: {
+                  ugen: "flock.ugen.lfSaw",
+                  freq: 200,
+                  mul: 0.1
+              }
+          }
+      });
+
+      const TWO_PI = Math.PI*2; 
+
+      var isobel = [];
+      for (var i = 0 ; i < 5 ; i++){
+        var rads = (i/5) * TWO_PI; 
+        var x = 0.5 * Math.cos( rads ) + 0.5;
+        var y = 0.5 * Math.sin( rads ) + 0.5;
+        var polk = [x, y];
+        isobel.push(polk);
+      }
+      console.log(isobel);
+
+      var panner = new Nexus.Pan2D("#panner", {
+          'size' : [200,200],
+          'range' : 0.9, 
+          'mode' : 'absolute', 
+          'speakers' :  isobel
+
+      });
+
+      panner.on("change", function(v){
+            //console.log(v);
+            for (var i = 0 ; i < v.length; i ++){
+                document.getElementById("l" + (i+1)).innerHTML = v[i];  
+            }
+      });
+  </script>
+</body>
+</html>
