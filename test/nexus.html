@@ -29,8 +29,10 @@ attach this to myos?
       flock.init();
       //var as = flock.webAudio.audioSystem.audioContextSingleton;
       //var as = flock.environment.audioSystem.context;
-      var as = flock.enviro.shared.audioSystem.context;
-
+      // flock.environment
+      //var as = flock.enviro.shared.audioSystem.context;
+      
+      var as = flock.environment.audioSystem;
 
       var synth = flock.synth({
           synthDef: {
@@ -57,10 +59,11 @@ attach this to myos?
           }
       });
 
-      Nexus.context = as;
+      Nexus.context = as.context;
+
       //var flockgain = flock.environment.audioSystem.context.createGain()
       var meter = new Nexus.Meter("#meter");
-      meter.connect(as.destination, 2);
+      meter.connect(as.nativeNodeManager.outputNode, 2);
       var but = new Nexus.Button("#button1");
 
   </script>
