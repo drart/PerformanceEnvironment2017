@@ -56,7 +56,7 @@ var udp = new osc.UDPPort({
 udp.on("ready", function () {
     console.log("Listening for OSC over UDP on port: " + udp.options.localPort);
     console.log("Broadcasting OSC over UDP to", udp.options.remoteAddress + ", Port:", udp.options.remotePort);
-    console.log(udp);
+    //console.log(udp);
 });
 
 udp.open();

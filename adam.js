@@ -231,6 +231,10 @@
             setallvol: {
                 funcName: "adam.octopus.setallvol",
                 args: ["{arguments}.0", "{that}"]
+            },
+            proceed: {
+                funcName: "adam.octopus.proceed",
+                args: ["{arguments}.0", "{that}"]
             }
         },
         synthDef: [
@@ -321,8 +325,36 @@
 
     adam.octopus.setallvol = function(v, that){
         var that = that;
-        for (var i = 0 ; i < 8; i++){
-            that.set( "f" + (i+1)+".mul", adam.dbtorms(v) );
+        if ( v instanceof Array){
+            if (v.length === 8){
+                for (var i = 0; i < 8; i++){
+                    that.set( "f" + (i+1)+".mul", adam.dbtorms(v[i]) );
+                }
+            } 
+            return;
+        }
+        if ( typeof v === "number"){
+            for (var i = 0 ; i < 8; i++){
+                that.set( "f" + (i+1)+".mul", adam.dbtorms(v) );
+            }
+            return;
+        }
+        if (typeof v === "object"){
+            console.log("it's an object and not an array");
+            return;
+        }
+    };
+
+    adam.octopus.proceed = function(index, that){
+        if (index === undefined){
+            index = 1;
+        }
+        var temp = [];
+        for (var i = 0; i < 8; i++){
+            temp[i]  = that.get("f" + (i+1) + ".freq");
+        }
+        for (var i = 0; i < 8; i++){
+            that.set("f" + ( i+1) + ".freq", temp[(i+index)%8]);
         }
     };
 

@@ -8,34 +8,16 @@
 <body>
 
   <div id="meter"></div>
-  <div id="button1"></div>
-
-      <!--
-  <canvas nx="multitouch"></canvas>
-  <canvas nx="tilt"></canvas> 
-	
-attach this to myos?  
-  <canvas nx="multislider"></canvas>
-
-  <canvas nx="waveform" style="width:900px;height:100px;display:block;margin:10px auto 0px"></canvas>
-
-  <canvas nx="envelope"></canvas>
-
-  <canvas nx="waveform"></canvas>
-  -->
+  <div id="power"></div>
 
   <script>
 
       flock.init();
-      //var as = flock.webAudio.audioSystem.audioContextSingleton;
-      //var as = flock.environment.audioSystem.context;
-      // flock.environment
-      //var as = flock.enviro.shared.audioSystem.context;
-      
       var as = flock.environment.audioSystem;
 
       var synth = flock.synth({
-          synthDef: {
+          synthDef: [
+            {
               ugen: "flock.ugen.filter.biquad.hp",
               freq: {
                   ugen: "flock.ugen.sin",
@@ -44,7 +26,7 @@ attach this to myos?
                       ugen: "flock.ugen.xLine",
                       rate: "control",
                       start: 0.7,
-                      end: 300,
+                      end: 100,
                       duration: 20
                   },
                   phase: 0,
@@ -56,15 +38,44 @@ attach this to myos?
                   freq: 200,
                   mul: 0.1
               }
+          },
+          {
+              ugen: "flock.ugen.filter.biquad.hp",
+              freq: {
+                  ugen: "flock.ugen.sin",
+                  rate: "control",
+                  freq: {
+                      ugen: "flock.ugen.xLine",
+                      rate: "control",
+                      start: 40,
+                      end: 1,
+                      duration: 20
+                  },
+                  phase: 0,
+                  mul: 3600,
+                  add: 4000
+              },
+              source: {
+                  ugen: "flock.ugen.lfSaw",
+                  freq: 204,
+                  mul: 0.1
+              }
           }
+          ]
       });
 
       Nexus.context = as.context;
-
-      //var flockgain = flock.environment.audioSystem.context.createGain()
       var meter = new Nexus.Meter("#meter");
       meter.connect(as.nativeNodeManager.outputNode, 2);
-      var but = new Nexus.Button("#button1");
+
+      var power = new Nexus.Toggle("#power");
+      power.on('change', function(val){
+          if(val){
+              synth.play();
+          }else{
+              synth.pause();
+          }
+      });
 
   </script>
 </body>

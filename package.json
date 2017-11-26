@@ -5,6 +5,7 @@
   "dependencies": {
     "express": "^4.16.2",
     "flocking": "github:colinbdclark/flocking",
+    "music-ctls": "github:fluid-lab/music-ctrls",
     "ip": "^1.1.5",
     "myo": "3.0.0",
     "nan": "^2.6.2",

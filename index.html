@@ -2,14 +2,26 @@
     <head>
         <script src="node_modules/osc/dist/osc-browser.min.js"></script>
         <script src="node_modules/flocking/dist/flocking-all.js"></script>
+        <script src="node_modules/nexusui/dist/NexusUI.js"></script>
 
         <script>
             flock.init({
                 chans:8, 
                 bufferSize: 256
             });
+            var as = flock.environment.audioSystem;
         </script>
-
+        <style>
+            body{
+                padding: 0;
+                margin: 0;
+            }
+            #meter{
+                position: fixed;
+                bottom: 0;
+                left: 0;
+            }
+        </style>
     </head>
     <body>
         <script>
@@ -45,6 +57,7 @@
       
         <script src="midicontrollers.js"></script>
         <script src="adam.js"></script>
+
         <hr>
         <h2>OSC</h2>
 
@@ -52,6 +65,36 @@
             <div id="firstelementdummy"></div>
         </div>
 
+        <hr>
+        <h2>Nexus</h2>
+        <div id="meter"></div>
+        <div id="sequencer"></div>
+        <div id="power"></div>
+        <script>
+            Nexus.context = as.context;
+            var sequencer = new Nexus.Sequencer('#sequencer');
+                sequencer.matrix.set.all([
+                  [0,1,0,0,0,1,0,1,0,1],
+                  [1,1,0,1,0,1,0,1,0,1],
+                  [0,1,0,1,0,1,0,1,0,1],
+                  [1,0,0,1,0,1,0,1,1,0],
+                  [0,1,0,1,0,1,0,1,0,1]
+                ]);
+
+            var power = new Nexus.Toggle('#power');
+            power.on('change', function(v){
+                if(v){
+                    sequencer.start(500);
+                }else{
+                    sequencer.stop();
+                }
+            });
+            var meter = new Nexus.Spectrogram("#meter", {
+                'size': [window.innerWidth, 100]
+            });
+            meter.connect(as.nativeNodeManager.outputNode, 2);
+
+        </script>
         <!--script>
             function october2017(){
 
