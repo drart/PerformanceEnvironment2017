@@ -16,31 +16,43 @@
 
   <script>
 
-      flock.init();
+      flock.init({
+          chans: 8
+      });
 
       var synth = flock.synth({
-          synthDef: {
-              ugen: "flock.ugen.filter.biquad.hp",
-              freq: {
-                  ugen: "flock.ugen.sin",
-                  rate: "control",
-                  freq: {
-                      ugen: "flock.ugen.xLine",
-                      rate: "control",
-                      start: 0.7,
-                      end: 300,
-                      duration: 20
-                  },
-                  phase: 0,
-                  mul: 3600,
-                  add: 4000
-              },
-              source: {
-                  ugen: "flock.ugen.lfSaw",
-                  freq: 200,
-                  mul: 0.1
-              }
-          }
+          synthDef: [
+            {
+              id: "0", 
+              ugen: "flock.ugen.sinOsc",
+              freq: 200,
+              mul: 0
+            },
+            {
+              id: "1",
+              ugen: "flock.ugen.sinOsc",
+              freq: 201,
+              mul: 0
+            },
+            {
+              id: "2",
+              ugen: "flock.ugen.sinOsc",
+              freq: 202,
+              mul: 0
+            },
+            {
+              id: "3",
+              ugen: "flock.ugen.sinOsc",
+              freq: 203,
+              mul: 0
+            },
+            {
+              id: "4",
+              ugen: "flock.ugen.sinOsc",
+              freq: 204,
+              mul: 0
+            }
+          ]
       });
 
       const TWO_PI = Math.PI*2; 
@@ -53,7 +65,6 @@
         var polk = [x, y];
         isobel.push(polk);
       }
-      console.log(isobel);
 
       var panner = new Nexus.Pan2D("#panner", {
           'size' : [200,200],
@@ -64,9 +75,9 @@
       });
 
       panner.on("change", function(v){
-            //console.log(v);
             for (var i = 0 ; i < v.length; i ++){
                 document.getElementById("l" + (i+1)).innerHTML = v[i];  
+                synth.set(i + '.mul', v[i]);
             }
       });
   </script>

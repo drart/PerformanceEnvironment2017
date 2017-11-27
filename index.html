@@ -70,16 +70,15 @@
         <div id="meter"></div>
         <div id="sequencer"></div>
         <div id="power"></div>
+        <div id="env1"></div>
         <script>
             Nexus.context = as.context;
-            var sequencer = new Nexus.Sequencer('#sequencer');
-                sequencer.matrix.set.all([
-                  [0,1,0,0,0,1,0,1,0,1],
-                  [1,1,0,1,0,1,0,1,0,1],
-                  [0,1,0,1,0,1,0,1,0,1],
-                  [1,0,0,1,0,1,0,1,1,0],
-                  [0,1,0,1,0,1,0,1,0,1]
-                ]);
+            var sequencer = new Nexus.Sequencer('#sequencer',{
+                'size': [window.innerWidth,100],
+                'rows': 5,
+                'columns': 16
+            });
+            sequencer.matrix.populate.all([1.0, 0.5, 0.2, 0.1]);
 
             var power = new Nexus.Toggle('#power');
             power.on('change', function(v){
@@ -93,7 +92,27 @@
                 'size': [window.innerWidth, 100]
             });
             meter.connect(as.nativeNodeManager.outputNode, 2);
-
+            var env1 = new Nexus.Envelope("#env1", {
+                'size': [window.innerWidth,50],
+                'points': [
+                {
+                    x: 0.1,
+                    y: 0.4
+                },
+                {
+                    x: 0.35,
+                    y: 0.6
+                },
+                {
+                    x: 0.65,
+                    y: 0.2
+                },
+                {
+                    x: 0.9,
+                    y: 0.4
+                },
+                ]
+            });
         </script>
         <!--script>
             function october2017(){
