@@ -8,6 +8,7 @@
 <body>
 
   <div id="panner"></div>
+  <div id="power"></div>
   <div id="l1"> </div>
   <div id="l2"> </div>
   <div id="l3"> </div>
@@ -22,6 +23,12 @@
 
       var synth = flock.synth({
           synthDef: [
+            {
+                id: "dummy", // the first channel is the top speaker
+                ugen: "flock.ugen.sinOsc", 
+                freq: 0, 
+                mul: 0
+            },
             {
               id: "0", 
               ugen: "flock.ugen.sinOsc",
@@ -79,6 +86,15 @@
                 document.getElementById("l" + (i+1)).innerHTML = v[i];  
                 synth.set(i + '.mul', v[i]);
             }
+      });
+
+      var power = new Nexus.Toggle("#power");
+      power.on('change', function(val){
+          if(val){
+              synth.play();
+          }else{
+              synth.pause();
+          }
       });
   </script>
 </body>
