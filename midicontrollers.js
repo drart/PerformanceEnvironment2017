@@ -115,6 +115,19 @@ fluid.defaults("adam.midi.push", {
         }
     }
 });
+
+
+fluid.defaults("adam.midi.network", {
+    gradeNames: "flock.midi.connection",
+    openImmediately: true,
+    ports: {
+        input: {
+            name : "Network TOTOTO"
+        }
+    }
+});
+
+
 // ---------------------------------
 // SETUP PUSH LIGHTS
 // ---------------------------------
