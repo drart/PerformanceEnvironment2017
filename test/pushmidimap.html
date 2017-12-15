@@ -1,0 +1,23 @@
+
+<!DOCTYPE html>
+<head>
+    <title>Test Quneo</title>
+</head>
+
+<body>
+    <div id="midi-display"></div>
+    <script src="../node_modules/flocking/dist/flocking-all.js"></script>
+    <script src="../adam.js"></script>
+    <script src="../midicontrollers.js"></script>
+    <script src="../performancemappings.js"></script>
+    <script>
+        flock.init({
+            bufferSize : 256 
+        });
+
+        var cloosh = adam.cloosh();
+        cloosh.play();
+
+    </script>
+</body>
+</html>
